@@ -1,0 +1,2079 @@
+/* =========================================================
+   DASARA 2026 · FINAL RESPONSIVE STYLESHEET
+   Single file
+   Phones -> Tablets -> Laptops -> Desktops
+   ========================================================= */
+
+
+/* =========================================================
+   ROOT
+========================================================= */
+
+:root {
+  --bg: #F6EFDD;
+  --grid: #DDD2B8;
+  --line: #E3D8BE;
+  --logo: #7A3B0A;
+
+  --brown: #A04632;
+  --deep: #71320F;
+  --ink: #4A2A14;
+  --sub: #7A6350;
+
+  --cream: #F6EBD3;
+  --card: #FCF8EC;
+
+  --or: #D97A16;
+  --gold: #F2A51A;
+  --leaf: #5D7430;
+
+  --gut: clamp(16px, 5vw, 28px);
+  --gap: clamp(48px, 11vw, 80px);
+  --pad: clamp(18px, 5vw, 28px);
+  --rad: clamp(22px, 6vw, 30px);
+
+  --cw: clamp(76px, 22vw, 92px);
+
+  --safe-l: env(safe-area-inset-left, 0px);
+  --safe-r: env(safe-area-inset-right, 0px);
+  --safe-t: env(safe-area-inset-top, 0px);
+  --safe-b: env(safe-area-inset-bottom, 0px);
+}
+
+
+/* =========================================================
+   GLOBAL
+========================================================= */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  width: 100%;
+  color-scheme: light;
+
+  overflow-x: hidden;
+
+  scroll-padding-top:
+    calc(var(--safe-t) + 84px);
+
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+
+  width: 100%;
+  min-height: 100vh;
+  min-height: 100dvh;
+
+  overflow-x: clip;
+
+  font:
+    400 16px/1.65
+    Inter,
+    system-ui,
+    -apple-system,
+    "Segoe UI",
+    sans-serif;
+
+  color: var(--ink);
+  background-color: var(--bg);
+
+  background-image:
+    url("data:image/svg+xml,\
+<svg xmlns='http://www.w3.org/2000/svg' width='102' height='102'>\
+<path d='M17 0Q19 51 17 102' fill='none' stroke='%23CDBF9E' stroke-opacity='.3' stroke-width='1'/>\
+<path d='M0 17 Q51 19 102 17' fill='none' stroke='%23CDBF9E' stroke-opacity='.3' stroke-width='1'/>\
+<path d='M51 0Q49 51 51 102' fill='none' stroke='%23CDBF9E' stroke-opacity='.3' stroke-width='1'/>\
+<path d='M0 51 Q51 49 102 51' fill='none' stroke='%23CDBF9E' stroke-opacity='.3' stroke-width='1'/>\
+<path d='M85 0Q86.5 51 85 102' fill='none' stroke='%23CDBF9E' stroke-opacity='.3' stroke-width='1'/>\
+<path d='M0 85 Q51 86.5 102 85' fill='none' stroke='%23CDBF9E' stroke-opacity='.3' stroke-width='1'/>\
+</svg>");
+
+  background-size: 102px 102px;
+
+  -webkit-font-smoothing: antialiased;
+}
+
+img,
+svg,
+video,
+canvas {
+  max-width: 100%;
+}
+
+button,
+input,
+textarea {
+  font: inherit;
+}
+
+a,
+button {
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+}
+
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+textarea:focus-visible {
+  outline: 2px solid var(--or);
+  outline-offset: 2px;
+}
+
+
+/* =========================================================
+   NAVIGATION
+========================================================= */
+
+.nb {
+  position: sticky;
+
+  top:
+    calc(var(--safe-t) + 8px);
+
+  z-index: 50;
+
+  width:
+    min(
+      580px,
+      calc(
+        100% - 24px -
+        var(--safe-l) -
+        var(--safe-r)
+      )
+    );
+
+  margin: 10px auto 0;
+}
+
+.bar {
+  width: 100%;
+  min-width: 0;
+  height: 56px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  gap: 4px;
+  padding: 0 6px;
+
+  overflow: hidden;
+
+  background: var(--brown);
+
+  border: 2px dotted #F6EBD3;
+
+  outline: 1px solid var(--brown);
+  outline-offset: 1px;
+
+  border-radius: 30px;
+}
+
+.lg {
+  font:
+    400 28px
+    'Lakki Reddy',
+    'Noto Sans Telugu',
+    sans-serif;
+
+  color: #F6EBD3;
+  text-decoration: none;
+  line-height: 1;
+}
+
+#mb {
+  display: none;
+}
+
+.mn {
+  display: flex;
+
+  width: 100%;
+  min-width: 0;
+
+  align-items: center;
+  justify-content: space-between;
+
+  gap: 2px;
+}
+
+.mn a {
+  flex: 1;
+  min-width: 0;
+  min-height: 44px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 0 2px;
+
+  border-radius: 18px;
+
+  color: #F6EBD3;
+  text-decoration: none;
+
+  font-size: clamp(11px, 3.2vw, 14px);
+  font-weight: 500;
+
+  white-space: nowrap;
+}
+
+.mn a.on {
+  background: #F6EBD3;
+  color: var(--deep);
+}
+
+
+/* =========================================================
+   LAYOUT
+========================================================= */
+
+main {
+  width: 100%;
+  max-width: 760px;
+  min-width: 0;
+
+  margin: 0 auto;
+
+  padding:
+    0
+    max(var(--gut), var(--safe-r))
+    0
+    max(var(--gut), var(--safe-l));
+}
+
+section {
+  display: none;
+
+  width: 100%;
+  min-width: 0;
+
+  padding:
+    clamp(28px, 6vw, 44px)
+    0
+    clamp(56px, 12vw, 80px);
+}
+
+section.on {
+  display: block;
+}
+
+
+/* =========================================================
+   TYPE
+========================================================= */
+
+h2,
+.wm {
+  font-weight: 500;
+
+  letter-spacing: -.025em;
+  line-height: 1.12;
+
+  margin: 0 0 14px;
+}
+
+h2 {
+  font-size: clamp(34px, 9vw, 56px);
+  text-wrap: balance;
+}
+
+h3 {
+  font-size:
+    clamp(18px, 1.2vw + 15px, 22px);
+
+  font-weight: 500;
+  line-height: 1.3;
+
+  margin: 0 0 8px;
+
+  letter-spacing: -.01em;
+}
+
+p {
+  margin: 0 0 16px;
+
+  max-width: 52ch;
+
+  color: var(--sub);
+
+  font-size:
+    clamp(15px, .3vw + 14px, 17px);
+
+  line-height: 1.65;
+
+  text-wrap: pretty;
+}
+
+.eb {
+  display: inline-flex;
+
+  align-items: center;
+  gap: 8px;
+
+  margin-bottom: 14px;
+
+  font-size: 11.5px;
+  font-weight: 600;
+
+  letter-spacing: .08em;
+
+  text-transform: uppercase;
+
+  color: var(--brown);
+}
+
+.eb svg {
+  width: 18px;
+  height: 18px;
+
+  flex: none;
+
+  color: var(--or);
+}
+
+
+/* =========================================================
+   BUTTONS
+========================================================= */
+
+.btn {
+  display: inline-flex;
+
+  align-items: center;
+  justify-content: center;
+
+  gap: 8px;
+
+  min-height: 48px;
+
+  padding: 11px 24px;
+
+  background: var(--brown);
+  color: #FFF7E8;
+
+  border: 0;
+  border-radius: 24px;
+
+  font:
+    500 15px/1.2
+    Inter,
+    sans-serif;
+
+  text-decoration: none;
+  text-align: center;
+
+  cursor: pointer;
+
+  box-shadow: 0 3px 0 var(--deep);
+
+  transition:
+    background .3s,
+    transform .15s,
+    box-shadow .15s;
+}
+
+.btn:active {
+  transform: translateY(2px);
+  box-shadow: 0 1px 0 var(--deep);
+}
+
+.btn.st {
+  outline: 1.5px dashed #F3E4C6;
+  outline-offset: -5px;
+
+  box-shadow: 0 5px 0 var(--deep);
+}
+
+.btn.st:active {
+  box-shadow: 0 3px 0 var(--deep);
+}
+
+.btn svg {
+  width: 20px;
+  height: 20px;
+
+  flex: none;
+}
+
+.btn i {
+  font-style: normal;
+
+  display: inline-block;
+
+  transition: transform .3s;
+}
+
+.btn.alt {
+  background: transparent;
+  color: var(--brown);
+
+  box-shadow:
+    inset 0 0 0 1px var(--brown);
+}
+
+.btn[disabled] {
+  background: transparent;
+
+  box-shadow:
+    inset 0 0 0 1px var(--line);
+
+  color: var(--sub);
+
+  cursor: not-allowed;
+
+  transform: none;
+}
+
+@media (hover: hover) {
+
+  .btn:hover {
+    background: var(--deep);
+  }
+
+  .btn:hover i {
+    transform: translateX(3px);
+  }
+
+  .btn.alt:hover {
+    background: var(--cream);
+  }
+
+  .btn[disabled]:hover {
+    background: transparent;
+  }
+}
+
+.row {
+  display: flex;
+
+  align-items: center;
+  flex-wrap: wrap;
+
+  gap: 12px;
+
+  margin-top: 22px;
+}
+
+
+/* =========================================================
+   HERO
+========================================================= */
+
+.hero {
+  --wm: clamp(108px, 32vw, 210px);
+  --wmt: clamp(48px, 12vw, 84px);
+  --hp: clamp(16px, 4vw, 32px);
+
+  --cx: 50%;
+
+  --half: calc(var(--wm) * 1.2);
+
+  --ty:
+    calc(
+      var(--hp) + var(--wmt)
+    );
+
+  --dw: clamp(34px, 10vw, 56px);
+  --lw: clamp(44px, 13vw, 72px);
+  --gw: clamp(22px, 7vw, 34px);
+  --ow: clamp(18px, 5.5vw, 28px);
+
+  position: relative;
+
+  width: 100%;
+  min-width: 0;
+
+  padding-top: var(--hp);
+
+  text-align: center;
+}
+
+.hero h1.wm {
+  position: relative;
+
+  z-index: 1;
+
+  font-family:
+    'Lakki Reddy',
+    'Noto Sans Telugu',
+    sans-serif !important;
+
+  font-weight: 400 !important;
+
+  font-size: var(--wm) !important;
+
+  line-height: 1.2 !important;
+
+  letter-spacing: 0;
+
+  margin:
+    var(--wmt)
+    0
+    0 !important;
+
+  max-width: 100%;
+
+  color: var(--logo);
+
+  text-shadow:
+    .045em .045em 0
+    rgba(160, 110, 70, .35) !important;
+}
+
+.hero > p.tg {
+  margin:
+    clamp(14px, 4vw, 26px)
+    auto
+    0;
+
+  max-width: 11em;
+
+  font-size:
+    clamp(12.5px, 3.4vw, 15px);
+
+  line-height: 1.45;
+
+  color: var(--ink);
+
+  text-align: right;
+}
+
+.hero > div.a:not(.row):not(.fn) {
+  flex-wrap: wrap;
+
+  gap:
+    clamp(14px, 4vw, 24px) !important;
+
+  margin-top:
+    clamp(32px, 8vw, 56px) !important;
+}
+
+.hero > div.a > svg {
+  width:
+    clamp(64px, 18vw, 88px);
+
+  height: auto;
+
+  flex: none;
+}
+
+.dt {
+  font:
+    600 clamp(16px, 4.6vw, 24px)/1.4
+    'Playfair Display',
+    Georgia,
+    serif;
+
+  text-align: left;
+}
+
+.hero > .row\.a {
+  flex-direction: column;
+  align-items: stretch;
+
+  width: 100%;
+  max-width: 420px;
+
+  margin:
+    clamp(28px, 7vw, 44px)
+    auto
+    0 !important;
+}
+
+.hero > .row\.a .btn {
+  width: 100%;
+}
+
+.fn {
+  margin:
+    clamp(16px, 4vw, 24px)
+    0
+    0;
+
+  font-size: 12px;
+  font-weight: 600;
+
+  color: #8E8A80;
+
+  text-align: center;
+}
+
+.arch {
+  position: relative;
+
+  width:
+    clamp(190px, 64vw, 300px);
+
+  aspect-ratio: 3 / 4;
+
+  margin:
+    clamp(56px, 14vw, 96px)
+    auto
+    0 !important;
+}
+
+.arch svg.f {
+  display: block;
+
+  width: 100%;
+  height: 100%;
+}
+
+
+/* =========================================================
+   HERO DECORATIONS
+========================================================= */
+
+.cut {
+  position: absolute;
+
+  display: block;
+
+  pointer-events: none;
+
+  max-width: none;
+
+  height: auto;
+
+  animation:
+    drop 1.1s cubic-bezier(.2,.8,.2,1) both,
+    bob 7s ease-in-out 1.2s infinite;
+}
+
+.hero > .cut:nth-of-type(1) {
+  width: var(--dw) !important;
+
+  left:
+    max(
+      0px,
+      calc(
+        var(--cx) -
+        var(--wm) * 1.4
+      )
+    ) !important;
+
+  right: auto !important;
+
+  top:
+    calc(
+      var(--ty) +
+      var(--wm) * 1.02
+    ) !important;
+}
+
+.hero > .cut:nth-of-type(2) {
+  width: var(--lw) !important;
+
+  left:
+    min(
+      calc(
+        var(--cx) +
+        var(--wm)
+      ),
+      calc(
+        100% -
+        var(--lw)
+      )
+    ) !important;
+
+  right: auto !important;
+
+  top:
+    calc(
+      var(--ty) +
+      var(--wm) * .55
+    ) !important;
+}
+
+.hero > .cut:nth-of-type(3) {
+  width: var(--gw) !important;
+
+  left:
+    calc(
+      var(--cx) +
+      var(--wm) * .93
+    ) !important;
+
+  right: auto !important;
+
+  top:
+    calc(
+      var(--ty) -
+      var(--wm) * .3
+    ) !important;
+}
+
+.hero > .cut:nth-of-type(4) {
+  width: var(--ow) !important;
+
+  left:
+    max(
+      0px,
+      calc(
+        var(--cx) -
+        var(--wm) * 1.22
+      )
+    ) !important;
+
+  right: auto !important;
+
+  top:
+    calc(
+      var(--ty) -
+      var(--wm) * .24
+    ) !important;
+}
+
+@keyframes drop {
+  from {
+    opacity: 0;
+    transform:
+      translateY(-30px)
+      rotate(var(--r, 0deg));
+  }
+}
+
+@keyframes bob {
+  0%,
+  100% {
+    transform:
+      translateY(0)
+      rotate(var(--r, 0deg));
+  }
+
+  50% {
+    transform:
+      translateY(-8px)
+      rotate(var(--r, 0deg));
+  }
+}
+
+.hero .gl {
+  margin-top: var(--gap) !important;
+}
+
+.hero .blk {
+  margin-top: var(--gap) !important;
+}
+
+.hero > div.blk:last-child {
+  margin-top:
+    clamp(28px, 6vw, 44px) !important;
+}
+
+.hero .blk p {
+  margin-inline: 0;
+}
+
+
+/* =========================================================
+   GARLAND
+========================================================= */
+
+.gl {
+  height: 64px;
+
+  margin-left:
+    calc(50% - 50vw);
+
+  margin-right:
+    calc(50% - 50vw);
+
+  background: var(--g) repeat-x;
+
+  opacity: .95;
+
+  overflow: hidden;
+
+  animation:
+    gl 50s linear infinite;
+}
+
+@keyframes gl {
+  to {
+    background-position: 960px 0;
+  }
+}
+
+
+/* =========================================================
+   BLOCKS / CARDS
+========================================================= */
+
+.blk {
+  margin-top: var(--gap);
+
+  text-align: left;
+
+  min-width: 0;
+}
+
+.note,
+.panel {
+  position: relative;
+
+  width: 100%;
+  min-width: 0;
+
+  padding: var(--pad);
+
+  background: var(--card);
+
+  border: 1px solid var(--line);
+
+  border-radius:
+    6px
+    var(--rad)
+    6px
+    var(--rad);
+}
+
+.note {
+  overflow: hidden;
+}
+
+.panel {
+  margin: 0 0 18px;
+}
+
+
+/* =========================================================
+   EVENTS / AVATAR SCROLLER
+========================================================= */
+
+.swipe {
+  display: flex;
+
+  gap:
+    clamp(12px, 3.5vw, 18px);
+
+  width:
+    calc(
+      100% +
+      var(--gut) * 2
+    );
+
+  max-width: none;
+
+  margin:
+    0
+    calc(var(--gut) * -1);
+
+  padding:
+    calc(var(--cw) * .45 + 6px)
+    var(--gut)
+    28px;
+
+  overflow-x: auto;
+  overflow-y: hidden;
+
+  scroll-snap-type: x mandatory;
+
+  scroll-padding-inline:
+    var(--gut);
+
+  -webkit-overflow-scrolling: touch;
+
+  overscroll-behavior-x: contain;
+
+  scrollbar-width: none;
+}
+
+.swipe::-webkit-scrollbar {
+  display: none;
+}
+
+
+/* =========================================================
+   AVATAR CARD
+========================================================= */
+
+.day {
+  position: relative;
+
+  flex:
+    0 0
+    clamp(248px, 78vw, 320px);
+
+  width:
+    clamp(248px, 78vw, 320px);
+
+  min-width: 0;
+
+  padding:
+    clamp(24px, 6vw, 30px)
+    clamp(18px, 5vw, 24px)
+    22px;
+
+  background: var(--card);
+
+  border: 1px solid var(--line);
+
+  border-radius:
+    6px
+    clamp(26px, 8vw, 36px)
+    6px
+    clamp(26px, 8vw, 36px);
+
+  scroll-snap-align: center;
+
+  transform: scale(.94);
+
+  opacity: .75;
+
+  transition:
+    transform .6s cubic-bezier(.2,.7,.2,1),
+    opacity .6s;
+}
+
+.day.in {
+  transform: scale(1);
+  opacity: 1;
+}
+
+
+/* =========================================================
+   AVATAR DECORATIVE CIRCLE
+========================================================= */
+
+.day .cutw {
+  position: absolute;
+
+  right:
+    clamp(10px, 3.5vw, 16px);
+
+  top:
+    calc(
+      var(--cw) * -.45
+    );
+
+  width: var(--cw);
+  height: var(--cw);
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  pointer-events: none;
+}
+
+.day .cutw::before {
+  content: "";
+
+  position: absolute;
+
+  inset: 9%;
+
+  border-radius: 50%;
+
+  background: var(--t);
+}
+
+.day .cutw svg {
+  position: relative;
+
+  width:
+    calc(
+      var(--cw) * .67
+    );
+
+  height:
+    calc(
+      var(--cw) * .67
+    );
+
+  color: var(--c);
+
+  transition:
+    transform .9s
+    cubic-bezier(.2,.7,.2,1);
+}
+
+.day.in .cutw svg {
+  transform:
+    rotate(45deg)
+    scale(1.08);
+}
+
+
+/* =========================================================
+   AVATAR CONTENT
+========================================================= */
+
+.day .bd {
+  padding: 0;
+}
+
+.day .k {
+  font-size: 11.5px;
+
+  font-weight: 600;
+
+  color: var(--or);
+
+  letter-spacing: .06em;
+
+  text-transform: uppercase;
+}
+
+.day h3 {
+  margin:
+    8px
+    calc(var(--cw) * .72)
+    0
+    0;
+
+  font-size:
+    clamp(19px, 5.4vw, 22px);
+
+  line-height: 1.15;
+
+  text-transform: none;
+
+  letter-spacing: .01em;
+}
+
+
+/* =========================================================
+   AVATAR PHOTO
+========================================================= */
+
+.day .avatar-photo {
+  width: 100%;
+
+  height:
+    clamp(170px, 42vw, 220px);
+
+  margin-top: 18px;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  overflow: hidden;
+
+  background: transparent;
+
+  border-radius: 12px;
+}
+
+.day .avatar-photo img {
+  display: block;
+
+  width: 100%;
+  height: 100%;
+
+  max-width: 100%;
+
+  object-fit: contain;
+
+  object-position: center;
+
+  border-radius: 12px;
+
+  vertical-align: middle;
+}
+
+
+/* =========================================================
+   AVATAR DATE
+========================================================= */
+
+.day .avatar-day {
+  margin-top: 18px;
+
+  padding-top: 12px;
+
+  border-top:
+    1px dashed var(--line);
+
+  font-size: 11.5px;
+
+  font-weight: 600;
+
+  color: var(--or);
+
+  letter-spacing: .06em;
+
+  text-transform: uppercase;
+}
+
+
+/* =========================================================
+   FESTIVAL IDENTITY
+========================================================= */
+
+.festival-info {
+  margin-top: 34px;
+
+  text-align: center;
+
+  display: flex;
+
+  flex-direction: column;
+
+  align-items: center;
+  justify-content: center;
+}
+
+.festival-name {
+  font-family:
+    'Playfair Display',
+    serif;
+
+  font-size:
+    clamp(20px, 5vw, 28px);
+
+  font-weight: 600;
+
+  color: var(--deep);
+
+  line-height: 1.2;
+
+  letter-spacing: .2px;
+}
+
+.festival-by {
+  font-family: Inter, sans-serif;
+
+  font-size: 10px;
+
+  font-weight: 500;
+
+  color: var(--sub);
+
+  letter-spacing: .5px;
+
+  margin-right: 5px;
+
+  vertical-align: 2px;
+}
+
+.festival-location {
+  margin-top: 4px;
+
+  font-family:
+    Inter,
+    sans-serif;
+
+  font-size: 14px;
+
+  font-weight: 500;
+
+  color: var(--sub);
+
+  letter-spacing: .5px;
+
+  transform: translateY(-2px);
+}
+
+.location-pin {
+  font-size: 12px;
+
+  margin-right: 2px;
+}
+
+
+/* =========================================================
+   POOJA / CHANDA
+========================================================= */
+
+.slot {
+  display: flex;
+
+  align-items: center;
+  justify-content: space-between;
+
+  gap: 12px;
+
+  min-width: 0;
+
+  padding: 16px 0;
+
+  border-top:
+    1px dashed var(--line);
+}
+
+.slot > div {
+  flex: 1;
+  min-width: 0;
+}
+
+.slot b {
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.slot .btn {
+  flex: none;
+
+  min-height: 44px;
+
+  padding: 9px 18px;
+
+  font-size: 14px;
+
+  white-space: nowrap;
+}
+
+.tag {
+  margin-top: 3px;
+
+  font-size: 12px;
+
+  font-weight: 500;
+
+  color: var(--leaf);
+}
+
+.tag.no {
+  color: var(--brown);
+}
+
+label {
+  display: block;
+
+  margin: 18px 0 6px;
+
+  font-size: 13px;
+
+  color: var(--sub);
+}
+
+input,
+textarea {
+  display: block;
+
+  width: 100%;
+  max-width: 100%;
+
+  padding: 13px 14px;
+
+  font:
+    inherit;
+
+  font-size: 16px;
+
+  color: var(--ink);
+
+  background: var(--bg);
+
+  border: 1px solid var(--line);
+
+  border-radius: 12px;
+}
+
+textarea {
+  min-height: 88px;
+
+  resize: vertical;
+}
+
+.panel .row .btn {
+  width: 100%;
+}
+
+
+/* =========================================================
+   PACKAGE PICKER
+========================================================= */
+
+.pk {
+  display: grid;
+
+  grid-template-columns:
+    repeat(
+      2,
+      minmax(0, 1fr)
+    );
+
+  gap: 10px;
+
+  margin-top: 10px;
+}
+
+.pk button {
+  width: 100%;
+
+  min-height: 54px;
+
+  padding: 14px 12px;
+
+  font:
+    500 14px/1.3
+    Inter,
+    sans-serif;
+
+  color: var(--ink);
+
+  text-align: left;
+
+  background: var(--bg);
+
+  border: 1px solid var(--line);
+
+  border-radius: 14px;
+
+  cursor: pointer;
+
+  transition: .25s;
+}
+
+.pk button.selected,
+.pk button.sel {
+  border-color: var(--brown);
+
+  background: var(--cream);
+}
+
+@media (hover: hover) {
+
+  .pk button:hover {
+    border-color: var(--brown);
+
+    background: var(--cream);
+  }
+}
+
+.msg {
+  margin-top: 14px;
+
+  font-size: 14px;
+
+  line-height: 1.5;
+
+  color: var(--leaf);
+}
+
+
+/* =========================================================
+   MODALS
+========================================================= */
+
+.modal {
+  position: fixed;
+
+  inset: 0;
+
+  z-index: 1000;
+
+  display: flex;
+
+  align-items: flex-end;
+
+  justify-content: center;
+
+  padding: 0;
+
+  background:
+    rgba(40, 20, 10, .38);
+
+  -webkit-backdrop-filter:
+    blur(5px);
+
+  backdrop-filter:
+    blur(5px);
+
+  opacity: 0;
+
+  visibility: hidden;
+
+  pointer-events: none;
+
+  transition:
+    opacity .2s ease,
+    visibility .2s ease;
+}
+
+.modal[aria-hidden="false"] {
+  opacity: 1;
+
+  visibility: visible;
+
+  pointer-events: auto;
+}
+
+.modal-box {
+  width: 100%;
+  max-width: 100%;
+
+  max-height: 90vh;
+  max-height: 90dvh;
+
+  padding:
+    24px
+    max(20px, var(--safe-r))
+    calc(24px + var(--safe-b))
+    max(20px, var(--safe-l));
+
+  overflow-x: hidden;
+  overflow-y: auto;
+
+  overscroll-behavior: contain;
+
+  background: var(--bg);
+
+  border:
+    1px solid
+    rgba(125, 70, 25, .15);
+
+  border-radius:
+    22px 22px 0 0;
+
+  box-shadow:
+    0 20px 60px
+    rgba(50, 25, 10, .2);
+}
+
+.modal-box h3 {
+  margin: 12px 0 8px;
+}
+
+.modal-box .row {
+  flex-direction: column-reverse;
+
+  align-items: stretch;
+
+  margin-top: 24px;
+}
+
+.modal-box .row .btn {
+  width: 100%;
+}
+
+
+/* =========================================================
+   FOOTER
+========================================================= */
+
+footer {
+  width: 100%;
+
+  margin-top: 20px;
+
+  overflow: hidden;
+
+  padding:
+    0
+    max(var(--gut), var(--safe-r))
+    calc(36px + var(--safe-b))
+    max(var(--gut), var(--safe-l));
+
+  text-align: center;
+
+  font-size: 13px;
+
+  line-height: 1.7;
+
+  color: var(--sub);
+}
+
+footer .gl {
+  margin-bottom: 26px;
+}
+
+
+/* =========================================================
+   SMALL PHONES
+========================================================= */
+
+@media (max-width: 359px) {
+
+  .mn a {
+    font-size: 10.5px;
+  }
+
+  .pk {
+    gap: 8px;
+  }
+
+  .pk button {
+    padding: 12px 10px;
+
+    font-size: 13px;
+  }
+
+  .slot {
+    gap: 8px;
+  }
+
+  .slot .btn {
+    padding: 9px 14px;
+  }
+
+  .day h3 {
+    font-size: 18px;
+  }
+
+  .day .avatar-photo {
+    height: 170px;
+  }
+}
+
+
+/* =========================================================
+   TABLETS
+========================================================= */
+
+@media (min-width: 480px) {
+
+  .hero > .row\.a {
+    flex-direction: row;
+
+    justify-content: center;
+
+    max-width: none;
+
+    width: auto;
+  }
+
+  .hero > .row\.a .btn {
+    width: auto;
+
+    min-width: 200px;
+  }
+}
+
+
+/* =========================================================
+   LARGE TABLETS
+========================================================= */
+
+@media (min-width: 601px) {
+
+  .nb {
+    margin-top: 16px;
+  }
+
+  .bar {
+    height: 60px;
+  }
+
+  .mn a {
+    padding: 0 12px;
+  }
+
+  .pk {
+    grid-template-columns:
+      repeat(
+        auto-fit,
+        minmax(140px, 1fr)
+      );
+  }
+
+  .modal {
+    align-items: center;
+
+    padding: 24px;
+  }
+
+  .modal-box {
+    width: min(100%, 460px);
+
+    max-width: 460px;
+
+    max-height:
+      min(90dvh, 720px);
+
+    padding: 28px;
+
+    border-radius: 20px;
+  }
+
+  .modal-box .row {
+    flex-direction: row;
+
+    justify-content: flex-end;
+
+    align-items: center;
+  }
+
+  .modal-box .row .btn {
+    width: auto;
+  }
+
+  .panel .row .btn {
+    width: auto;
+  }
+}
+
+
+/* =========================================================
+   LANDSCAPE PHONES
+========================================================= */
+
+@media
+  (max-height: 500px)
+  and (orientation: landscape) {
+
+  .nb {
+    margin-top: 6px;
+  }
+
+  .bar {
+    height: 48px;
+  }
+
+  .mn a {
+    min-height: 40px;
+  }
+
+  .modal {
+    align-items: center;
+
+    padding: 8px;
+  }
+
+  .modal-box {
+    width:
+      min(100%, 520px);
+
+    max-height: 94dvh;
+
+    padding:
+      16px 20px;
+
+    border-radius: 16px;
+  }
+
+  .modal-box .row {
+    flex-direction: row;
+
+    justify-content: flex-end;
+
+    margin-top: 16px;
+  }
+
+  .modal-box .row .btn {
+    width: auto;
+  }
+}
+
+
+/* =========================================================
+   LAPTOPS
+========================================================= */
+
+@media (min-width: 900px) {
+
+  body {
+    font-size: 17px;
+  }
+
+  .note,
+  .panel {
+    padding: 30px;
+  }
+
+  .slot {
+    padding: 18px 0;
+  }
+
+  .gl {
+    margin-inline: 0;
+
+    -webkit-mask-image:
+      linear-gradient(
+        90deg,
+        transparent 0,
+        #000 14%,
+        #000 86%,
+        transparent 100%
+      );
+
+    mask-image:
+      linear-gradient(
+        90deg,
+        transparent 0,
+        #000 14%,
+        #000 86%,
+        transparent 100%
+      );
+  }
+
+  main .gl {
+    margin-inline:
+      calc(var(--gut) * -1);
+  }
+
+  footer .gl {
+    max-width: 760px;
+
+    margin-inline: auto;
+  }
+}
+
+
+/* =========================================================
+   DESKTOP
+========================================================= */
+
+@media (min-width: 1000px) {
+
+  main {
+    max-width: 1120px;
+  }
+
+  .nb {
+    width:
+      min(
+        640px,
+        calc(100% - 48px)
+      );
+  }
+
+  section {
+    padding-top: 48px;
+  }
+
+
+  /* =========================
+     HOME
+  ========================= */
+
+  .hero {
+    --wm: clamp(150px, 15vw, 220px);
+
+    --wmt: 56px;
+
+    --hp: 40px;
+
+    --cg:
+      clamp(32px, 5vw, 80px);
+
+    --colw:
+      calc(
+        (100% - var(--cg)) * .575
+      );
+
+    --mid:
+      calc(
+        var(--colw) / 2
+      );
+
+    --cx: var(--mid);
+
+    --dw:
+      clamp(44px, 3.6vw, 54px);
+
+    --lw:
+      clamp(56px, 4.6vw, 68px);
+
+    --gw: 30px;
+
+    --ow: 24px;
+  }
+
+  .hero.on {
+    display: grid;
+
+    grid-template-columns:
+      minmax(0, 1.15fr)
+      minmax(0, .85fr);
+
+    column-gap: var(--cg);
+
+    align-items: start;
+  }
+
+  .hero > h1.wm {
+    grid-column: 1;
+    grid-row: 1;
+  }
+
+  .hero > p.tg {
+    grid-column: 1;
+    grid-row: 2;
+  }
+
+  .hero > div.a:not(.row):not(.fn) {
+    grid-column: 1;
+    grid-row: 3;
+  }
+
+  .hero > .row\.a {
+    grid-column: 1;
+    grid-row: 4;
+
+    width: auto;
+
+    max-width: none;
+
+    justify-self: center;
+
+    flex-direction: row;
+
+    justify-content: center;
+  }
+
+  .hero > .row\.a .btn {
+    width: auto;
+
+    min-width: 200px;
+  }
+
+  .hero > .fn {
+    grid-column: 1;
+    grid-row: 5;
+  }
+
+  .hero > .arch {
+    grid-column: 2;
+
+    grid-row: 1 / span 5;
+
+    align-self: center;
+
+    justify-self: center;
+
+    width:
+      clamp(260px, 26vw, 340px);
+
+    margin: 0 !important;
+  }
+
+  .hero > .gl {
+    grid-column: 1 / -1;
+  }
+
+  .hero > .blk.note {
+    grid-column: 1;
+  }
+
+  .hero > .blk:not(.note) {
+    grid-column: 2;
+  }
+
+  .hero > div.blk:last-child {
+    grid-column: 1 / -1;
+  }
+
+
+  /* =========================
+     AVATAR GRID
+  ========================= */
+
+  .swipe {
+    display: grid;
+
+    grid-template-columns:
+      repeat(
+        3,
+        minmax(0, 1fr)
+      );
+
+    gap:
+      calc(var(--cw) * .45 + 28px)
+      24px;
+
+    width: 100%;
+
+    margin: 0;
+
+    padding:
+      calc(var(--cw) * .45 + 6px)
+      0
+      12px;
+
+    overflow: visible;
+
+    scroll-snap-type: none;
+  }
+
+  .day {
+    flex: none;
+
+    width: auto;
+
+    max-width: none;
+
+    transform: none;
+
+    opacity: 1;
+  }
+
+  .day .avatar-photo {
+    height: 220px;
+  }
+
+  .day .avatar-photo img {
+    width: 100%;
+
+    height: 100%;
+
+    object-fit: contain;
+  }
+
+
+  /* =========================
+     POOJA + ABOUT
+  ========================= */
+
+  #pooja.on,
+  #about.on {
+    display: grid;
+
+    grid-template-columns:
+      repeat(
+        2,
+        minmax(0, 1fr)
+      );
+
+    column-gap: 28px;
+
+    align-items: start;
+  }
+
+  #pooja > .eb,
+  #pooja > h2,
+  #pooja > .gl,
+
+  #about > .eb,
+  #about > h2,
+  #about > .gl {
+    grid-column: 1 / -1;
+  }
+
+
+  /* =========================
+     CHANDA
+  ========================= */
+
+  #chanda .panel {
+    display: grid;
+
+    grid-template-columns:
+      repeat(
+        2,
+        minmax(0, 1fr)
+      );
+
+    column-gap: 32px;
+  }
+
+  #chanda .panel > div:first-child {
+    grid-column: 1 / -1;
+
+    grid-row: 1;
+  }
+
+  #chanda #pk {
+    grid-column: 1 / -1;
+
+    grid-row: 2;
+  }
+
+  #chanda label[for="ca"] {
+    grid-column: 1;
+
+    grid-row: 3;
+  }
+
+  #chanda #ca {
+    grid-column: 1;
+
+    grid-row: 4;
+  }
+
+  #chanda label[for="cn"] {
+    grid-column: 2;
+
+    grid-row: 3;
+  }
+
+  #chanda #cn {
+    grid-column: 2;
+
+    grid-row: 4;
+  }
+
+  #chanda label[for="cp"] {
+    grid-column: 1;
+
+    grid-row: 5;
+  }
+
+  #chanda #cp {
+    grid-column: 1;
+
+    grid-row: 6;
+  }
+
+  #chanda label[for="ce"] {
+    grid-column: 2;
+
+    grid-row: 5;
+  }
+
+  #chanda #ce {
+    grid-column: 2;
+
+    grid-row: 6;
+  }
+
+  #chanda label[for="cg"] {
+    grid-column: 1;
+
+    grid-row: 7;
+  }
+
+  #chanda #cg {
+    grid-column: 1;
+
+    grid-row: 8;
+  }
+
+  #chanda label[for="cf"] {
+    grid-column: 2;
+
+    grid-row: 7;
+  }
+
+  #chanda #cf {
+    grid-column: 2;
+
+    grid-row: 8;
+  }
+
+  #chanda .panel > .row {
+    grid-column: 1 / -1;
+
+    grid-row: 9;
+  }
+
+  #chanda .panel > .msg {
+    grid-column: 1 / -1;
+
+    grid-row: 10;
+  }
+}
+
+
+/* =========================================================
+   REDUCED MOTION
+========================================================= */
+
+@media (prefers-reduced-motion: reduce) {
+
+  *,
+  *::before,
+  *::after {
+    animation: none !important;
+
+    transition: none !important;
+
+    scroll-behavior: auto !important;
+  }
+}

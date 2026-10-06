@@ -1,0 +1,1329 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1, viewport-fit=cover"
+  >
+
+  <title>Dasara 2026 · Bhavanipuram</title>
+
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Noto+Sans+Telugu:wght@600;800&family=Lakki+Reddy&family=Playfair+Display:wght@600&display=swap"
+    rel="stylesheet"
+  >
+
+  <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+
+  <!-- =========================
+       DECORATIVE SVG SYMBOLS
+  ========================== -->
+
+  <svg
+    width="0"
+    height="0"
+    style="position:absolute"
+    aria-hidden="true"
+  >
+    <defs>
+
+      <!-- Flower -->
+      <symbol id="fl" viewBox="0 0 40 40">
+        <g fill="currentColor">
+          <ellipse cx="20" cy="20" rx="4.5" ry="18"/>
+          <ellipse
+            cx="20"
+            cy="20"
+            rx="4.5"
+            ry="18"
+            transform="rotate(45 20 20)"
+          />
+          <ellipse
+            cx="20"
+            cy="20"
+            rx="4.5"
+            ry="18"
+            transform="rotate(90 20 20)"
+          />
+          <ellipse
+            cx="20"
+            cy="20"
+            rx="4.5"
+            ry="18"
+            transform="rotate(135 20 20)"
+          />
+        </g>
+
+        <circle
+          cx="20"
+          cy="20"
+          r="4.5"
+          fill="#FFF3D1"
+        />
+      </symbol>
+
+      <!-- Diya -->
+      <symbol id="di" viewBox="0 0 60 56">
+
+        <path
+          class="flame"
+          d="M30 2c9 11 9 20 0 27-9-7-9-16 0-27z"
+          fill="#F2A51A"
+        />
+
+        <path
+          d="M30 14c4 6 4 10 0 14-4-4-4-8 0-14z"
+          fill="#FFF3D1"
+        />
+
+        <path
+          d="M4 32h52c0 14-11 22-26 22S4 46 4 32z"
+          fill="#9D422D"
+        />
+
+        <path
+          d="M4 32h52"
+          stroke="#F4EAD0"
+          stroke-width="3"
+        />
+
+      </symbol>
+
+      <!-- Lotus -->
+      <symbol id="lo" viewBox="0 0 80 50">
+
+        <g
+          fill="#F0B9A5"
+          stroke="#9D422D"
+          stroke-width="1.4"
+        >
+
+          <path
+            d="M40 4c10 10 10 30 0 42-10-12-10-32 0-42z"
+          />
+
+          <path
+            d="M40 46C26 40 14 28 12 12c14 2 24 14 28 34z"
+          />
+
+          <path
+            d="M40 46C54 40 66 28 68 12 54 14 44 26 40 46z"
+          />
+
+          <path
+            d="M40 46C22 46 8 40 2 28c14-2 28 4 38 18z"
+            fill="#F7D3C4"
+          />
+
+          <path
+            d="M40 46c18 0 32-6 38-18-14-2-28 4-38 18z"
+            fill="#F7D3C4"
+          />
+
+        </g>
+
+      </symbol>
+
+    </defs>
+  </svg>
+
+
+  <!-- =========================
+       NAVIGATION
+  ========================== -->
+
+  <header class="nb">
+
+    <div class="bar">
+
+      <button
+        id="mb"
+        hidden
+        aria-hidden="true"
+      ></button>
+
+      <nav
+        class="mn"
+        id="mn"
+        aria-label="Main"
+      >
+
+        <a href="#home">Home</a>
+        <a href="#events">Avataralu</a>
+        <a href="#pooja">Pooja</a>
+        <a href="#chanda">Chanda</a>
+        <a href="#about">About</a>
+
+      </nav>
+
+    </div>
+
+  </header>
+
+
+  <main>
+
+
+    <!-- =========================
+         HOME
+    ========================== -->
+
+    <section
+      id="home"
+      class="hero"
+    >
+
+      <!-- Decorative diya -->
+
+      <svg
+        class="cut"
+        style="
+          left:-4px;
+          top:150px;
+          width:46px;
+          --r:-8deg;
+          animation-delay:.9s,2s
+        "
+        viewBox="0 0 60 56"
+      >
+        <use href="#di"></use>
+      </svg>
+
+
+      <!-- Decorative lotus -->
+
+      <svg
+        class="cut"
+        style="
+          right:-6px;
+          top:120px;
+          width:58px;
+          --r:8deg;
+          animation-delay:1s,2.4s
+        "
+        viewBox="0 0 80 50"
+      >
+        <use href="#lo"></use>
+      </svg>
+
+
+      <!-- Decorative flower -->
+
+      <svg
+        class="cut"
+        style="
+          right:6px;
+          top:360px;
+          width:30px;
+          color:#F2A51A;
+          animation-delay:1.2s,1.2s
+        "
+        viewBox="0 0 40 40"
+      >
+        <use href="#fl"></use>
+      </svg>
+
+
+      <svg
+        class="cut"
+        style="
+          left:10px;
+          top:380px;
+          width:24px;
+          color:#D97A16;
+          animation-delay:1.3s,1.6s
+        "
+        viewBox="0 0 40 40"
+      >
+        <use href="#fl"></use>
+      </svg>
+
+
+      <!-- Telugu title -->
+
+      <h1
+        class="wm"
+        style="
+          font-family:'Lakki Reddy','Noto Sans Telugu',sans-serif;
+          font-weight:400;
+          color:var(--logo);
+          text-shadow:7px 7px 0 rgba(160,110,70,.35);
+          font-size:clamp(120px,38vw,210px);
+          line-height:1.05;
+          margin:46px 0 0
+        "
+      >
+        దసరా
+      </h1>
+
+
+      <p class="tg a">
+        A festival of devotion, music and shared meals
+      </p>
+
+
+<!-- Festival identity -->
+
+<div class="festival-info a">
+
+  <div class="festival-name">
+    <span class="festival-by">By</span>
+    Sri Durga Bhavani Friends Circle
+  </div>
+
+  <div class="festival-location">
+    <span class="location-pin">📍</span>
+    Bhavanipuram
+  </div>
+
+</div>
+      <!-- Hero buttons -->
+
+      <div
+        class="row a"
+        style="
+          justify-content:center;
+          margin-top:30px
+        "
+      >
+
+        <a
+          class="btn st"
+          href="#pooja"
+        >
+          Register for Pooja
+
+          <svg viewBox="0 0 40 40">
+            <use href="#fl"></use>
+          </svg>
+        </a>
+
+
+        <a
+          class="btn"
+          href="#events"
+        >
+          Explore Avataralu
+          <i>›</i>
+        </a>
+
+      </div>
+
+
+      <!-- =========================
+           AMMAVARI IMAGE FRAME
+      ========================== -->
+
+      <div
+        class="arch"
+      >
+
+        <div class="ammavari-frame">
+
+          <img
+            src="assets/ammavari.jpg"
+            alt="Ammavari"
+            class="ammavari-image"
+          >
+
+        </div>
+
+      </div>
+
+
+      <!-- Chanda -->
+
+      <div
+        class="blk"
+        style="margin-top:56px"
+      >
+
+        <div class="eb">
+
+          <svg>
+            <use href="#fl"></use>
+          </svg>
+
+          Chanda
+
+          <svg>
+            <use href="#fl"></use>
+          </svg>
+
+        </div>
+
+
+        <h3>
+          Be part of the offering
+        </h3>
+
+
+        <p>
+          Choose a package or give any amount you like.
+        </p>
+
+
+        <a
+          class="btn"
+          href="#chanda"
+        >
+          Give chanda
+          <i>→</i>
+        </a>
+
+      </div>
+
+
+      <!-- Sponsorship -->
+
+      <div
+        class="blk"
+        style="margin-top:56px"
+      >
+
+        <h3>
+          Want to sponsor something?
+        </h3>
+
+
+        <p>
+          Help us make this celebration possible.
+        </p>
+
+
+        <a
+          class="btn alt"
+          href="#about"
+        >
+          Contact us
+          <i>→</i>
+        </a>
+
+      </div>
+
+
+    </section>
+
+
+    <!-- =========================
+         AVATARALU
+    ========================== -->
+
+    <section
+      id="events"
+      class="sec"
+    >
+
+      <div class="eb">
+
+        <svg>
+          <use href="#fl"></use>
+        </svg>
+
+        Avataralu
+
+        <svg>
+          <use href="#fl"></use>
+        </svg>
+
+      </div>
+
+
+      <h2>
+        Avataralu
+      </h2>
+
+
+      <p>
+        Explore the divine avatars of each day.
+      </p>
+
+
+      <!--
+        Avatar cards will be generated by events.js.
+
+        Each card should contain ONLY:
+        - Day number
+        - Avatar name
+        - Avatar image
+
+        No long description/content.
+      -->
+
+      <div
+        class="swipe"
+        id="days"
+      ></div>
+
+
+      <div
+        class="gl"
+        style="margin-top:30px"
+      ></div>
+
+    </section>
+
+
+    <!-- =========================
+         POOJA
+    ========================== -->
+
+    <section
+      id="pooja"
+      class="sec"
+    >
+
+      <div class="eb">
+
+        <svg>
+          <use href="#fl"></use>
+        </svg>
+
+        Register
+
+        <svg>
+          <use href="#fl"></use>
+        </svg>
+
+      </div>
+
+
+      <h2>
+        Pooja
+      </h2>
+
+
+      <!-- DAILY POOJA -->
+
+      <div class="panel">
+
+        <h3>
+          Daily Pooja
+        </h3>
+
+
+        <p>
+          3 places each day. Registration closes 48 hours before the pooja.
+        </p>
+
+
+        <div id="slots"></div>
+
+      </div>
+
+
+      <!-- =========================
+           DAILY POOJA INFO POPUP
+      ========================== -->
+
+      <div
+        id="poojaInfo"
+        class="modal"
+        aria-hidden="true"
+      >
+
+        <div class="modal-box">
+
+          <div class="eb">
+
+            <svg>
+              <use href="#fl"></use>
+            </svg>
+
+            Daily Pooja
+
+            <svg>
+              <use href="#fl"></use>
+            </svg>
+
+          </div>
+
+
+          <h3 id="piTitle">
+            Day 1 · Bala Tripura Sundari
+          </h3>
+
+
+          <p>
+            You are registering for the Daily Pooja on this day.
+          </p>
+
+
+          <p>
+            For today, you can sponsor any one of these offerings:
+          </p>
+
+
+          <div
+            style="
+              margin:14px 0;
+              font-weight:600;
+              line-height:1.8;
+            "
+          >
+            🌺 Gajamala<br>
+            🥻 Cheera<br>
+            🍚 Prasadam
+          </div>
+
+
+          <p
+            style="
+              font-size:12px;
+              color:var(--sub)
+            "
+          >
+            Please enter your details in the next step to complete your registration.
+          </p>
+
+
+          <div class="row">
+
+            <button
+              class="btn alt"
+              id="piCancel"
+              type="button"
+            >
+              Cancel
+            </button>
+
+
+            <button
+              class="btn"
+              id="piContinue"
+              type="button"
+            >
+              Continue
+              <i>→</i>
+            </button>
+
+          </div>
+
+        </div>
+
+      </div>
+
+
+      <!-- =========================
+           DAILY POOJA FORM
+      ========================== -->
+
+      <div
+        id="poojaForm"
+        class="modal"
+        aria-hidden="true"
+      >
+
+        <div class="modal-box">
+
+          <div class="eb">
+
+            <svg>
+              <use href="#fl"></use>
+            </svg>
+
+            Registration
+
+            <svg>
+              <use href="#fl"></use>
+            </svg>
+
+          </div>
+
+
+          <h3 id="prTitle">
+            Daily Pooja Registration
+          </h3>
+
+
+          <p
+            style="
+              font-size:12px;
+              color:var(--sub)
+            "
+          >
+            Free registration · No payment required
+          </p>
+
+
+          <label for="prName">
+            Name
+          </label>
+
+
+          <input
+            id="prName"
+            type="text"
+            autocomplete="name"
+            placeholder="Enter your name"
+          >
+
+
+          <label for="prPhone">
+            Phone
+          </label>
+
+
+          <input
+            id="prPhone"
+            type="tel"
+            inputmode="numeric"
+            autocomplete="tel"
+            maxlength="10"
+            placeholder="10-digit phone number"
+          >
+
+
+          <div class="row">
+
+            <button
+              class="btn alt"
+              id="prCancel"
+              type="button"
+            >
+              Cancel
+            </button>
+
+
+            <button
+              class="btn"
+              id="prSubmit"
+              type="button"
+            >
+              Complete Registration
+              <i>→</i>
+            </button>
+
+          </div>
+
+
+          <div
+            class="msg"
+            id="prMsg"
+          ></div>
+
+        </div>
+
+      </div>
+
+
+      <!-- =========================
+           KUMKUM POOJA
+      ========================== -->
+
+      <div
+        class="panel"
+        id="kumkumPooja"
+      >
+
+        <div class="eb">
+
+          <svg>
+            <use href="#fl"></use>
+          </svg>
+
+          Special Pooja
+
+          <svg>
+            <use href="#fl"></use>
+          </svg>
+
+        </div>
+
+
+        <h3>
+          Kumkum Pooja
+        </h3>
+
+
+        <div
+          style="
+            margin:8px 0 16px;
+            font-size:14px;
+            font-weight:600;
+            color:var(--primary);
+          "
+        >
+          Pooja Fee: ₹501
+        </div>
+
+
+        <label for="kn">
+          Name
+        </label>
+
+
+        <input
+          id="kn"
+          type="text"
+          autocomplete="name"
+          placeholder="Enter your name"
+        >
+
+
+        <label for="kp">
+          Phone
+        </label>
+
+
+        <input
+          id="kp"
+          type="tel"
+          inputmode="numeric"
+          autocomplete="tel"
+          maxlength="10"
+          placeholder="10-digit phone number"
+        >
+
+
+        <div class="row">
+
+          <button
+            class="btn"
+            id="kb"
+            type="button"
+          >
+            Register & Pay
+            <i>→</i>
+          </button>
+
+        </div>
+
+
+        <div
+          class="msg"
+          id="km"
+        ></div>
+
+      </div>
+
+
+      <div
+        class="gl"
+        style="margin-top:30px"
+      ></div>
+
+    </section>
+
+
+    <!-- =========================
+         CHANDA
+    ========================== -->
+
+    <section
+      id="chanda"
+      class="sec"
+    >
+
+      <div class="eb">
+
+        <svg>
+          <use href="#fl"></use>
+        </svg>
+
+        Offering
+
+        <svg>
+          <use href="#fl"></use>
+        </svg>
+
+      </div>
+
+
+      <h2>
+        Chanda
+      </h2>
+
+
+      <p>
+        Your contribution is confirmed only after payment succeeds.
+      </p>
+
+
+      <div class="panel">
+
+        <div
+          style="
+            font-size:12px;
+            color:var(--sub)
+          "
+        >
+          Choose a package
+        </div>
+
+
+        <div
+          class="pk"
+          id="pk"
+        ></div>
+
+
+        <label for="ca">
+          Or enter an amount (₹)
+        </label>
+
+
+        <input
+          id="ca"
+          type="number"
+          min="1"
+          inputmode="numeric"
+          placeholder="Enter amount"
+        >
+
+
+        <label for="cn">
+          Name
+        </label>
+
+
+        <input
+          id="cn"
+          type="text"
+          autocomplete="name"
+          placeholder="Enter your name"
+        >
+
+
+        <label for="cf">
+          Family members' names
+        </label>
+
+
+        <textarea
+          id="cf"
+          rows="2"
+          placeholder="One name per line"
+        ></textarea>
+
+
+        <label for="cg">
+          Gothram
+        </label>
+
+
+        <input
+          id="cg"
+          type="text"
+          placeholder="Enter gothram"
+        >
+
+
+        <label for="cp">
+          Phone
+        </label>
+
+
+        <input
+          id="cp"
+          type="tel"
+          inputmode="numeric"
+          autocomplete="tel"
+          maxlength="10"
+          placeholder="10-digit phone number"
+        >
+
+
+        <label for="ce">
+          Email
+        </label>
+
+
+        <input
+          id="ce"
+          type="email"
+          autocomplete="email"
+          placeholder="Enter email"
+        >
+
+
+        <div class="row">
+
+          <button
+            class="btn"
+            id="cb"
+            type="button"
+          >
+            Pay with Razorpay
+            <i>→</i>
+          </button>
+
+        </div>
+
+
+        <div
+          class="msg"
+          id="cm"
+        ></div>
+
+      </div>
+
+
+      <div
+        class="gl"
+        style="margin-top:30px"
+      ></div>
+
+    </section>
+
+<!-- =========================
+         ABOUT
+    ========================== -->
+
+<section
+  id="about"
+  class="sec"
+>
+
+  <div class="eb">
+
+    <svg>
+      <use href="#fl"></use>
+    </svg>
+
+    Know us
+
+    <svg>
+      <use href="#fl"></use>
+    </svg>
+
+  </div>
+
+
+  <h2>
+    About
+  </h2>
+
+
+  <!-- Celebration -->
+
+  <div class="panel">
+
+    <h3>
+      The celebration
+    </h3>
+
+    <p style="margin:0">
+      Dasara is celebrated with devotion, cultural traditions,
+      poojas and community participation. Families and devotees
+      come together to seek the blessings of Ammavari and celebrate
+      these sacred days together.
+    </p>
+
+  </div>
+
+
+  <!-- Committee -->
+
+  <div class="panel">
+
+    <h3>
+      Committee
+    </h3>
+
+    <p style="margin:0">
+      Sri Durga Bhavani Friends Circle
+    </p>
+
+  </div>
+
+
+  <!-- Venue -->
+
+  <div class="panel">
+
+    <h3>
+      Venue
+    </h3>
+
+    <p>
+      Bhavanipuram, Vijayawada,
+      Andhra Pradesh, India
+    </p>
+
+    <a
+      href="https://maps.app.goo.gl/An7S2P2D91MLkZoo7"
+      target="_blank"
+      rel="noopener noreferrer"
+      class="btn alt"
+    >
+      Open Location
+      <i>↗</i>
+    </a>
+
+  </div>
+
+
+  <!-- Contact -->
+
+  <div class="panel">
+
+    <h3>
+      Contact
+    </h3>
+
+    <p style="margin-bottom:6px">
+      Sri Durga Bhavani Friends Circle
+    </p>
+
+    <p style="margin-bottom:0">
+
+      <a
+        href="tel:+916304569767"
+        style="color:inherit;text-decoration:none"
+      >
+        +91 63045 69767
+      </a>
+
+      <br>
+
+      <a
+        href="mailto:barathchowdary@gmail.com"
+        style="color:inherit;text-decoration:none"
+      >
+        barathchowdary@gmail.com
+      </a>
+
+    </p>
+
+
+    <div
+      class="contact-actions"
+      style="
+        display:flex;
+        gap:10px;
+        flex-wrap:wrap;
+        margin-top:16px;
+      "
+    >
+
+      <!-- Call -->
+
+      <a
+        href="tel:+916304569767"
+        class="btn"
+      >
+        Call
+        <i>↗</i>
+      </a>
+
+
+      <!-- WhatsApp -->
+
+      <a
+        href="https://wa.me/916304569767"
+        target="_blank"
+        rel="noopener noreferrer"
+        class="btn alt"
+      >
+        WhatsApp
+        <i>↗</i>
+      </a>
+
+    </div>
+
+  </div>
+
+
+  <!-- Festival Services -->
+
+  <div class="panel">
+
+    <h3>
+      Festival Services
+    </h3>
+
+    <p>
+      <strong>Kumkum Pooja</strong><br>
+      Devotees can register for Kumkum Pooja
+      for ₹501, subject to available slots.
+    </p>
+
+    <p>
+      <strong>Chanda</strong><br>
+      Chanda is a voluntary contribution
+      towards the Dasara celebration and
+      community arrangements.
+    </p>
+
+  </div>
+
+
+  <!-- Information & Policies -->
+
+  <div class="panel">
+
+    <h3>
+      Information &amp; Policies
+    </h3>
+
+    <p>
+      Please review the following information
+      before making a registration or payment.
+    </p>
+
+
+    <div
+      style="
+        display:flex;
+        flex-direction:column;
+        gap:10px;
+        margin-top:16px;
+      "
+    >
+
+      <a
+        href="terms.html"
+        class="btn alt"
+      >
+        Terms &amp; Conditions
+        <i>↗</i>
+      </a>
+
+
+      <a
+        href="privacy.html"
+        class="btn alt"
+      >
+        Privacy Policy
+        <i>↗</i>
+      </a>
+
+
+      <a
+        href="refund.html"
+        class="btn alt"
+      >
+        Refund &amp; Cancellation Policy
+        <i>↗</i>
+      </a>
+
+
+      <a
+        href="contact.html"
+        class="btn alt"
+      >
+        Contact Information
+        <i>↗</i>
+      </a>
+
+    </div>
+
+  </div>
+
+
+  <!-- Payment Notice -->
+
+  <div class="panel">
+
+    <h3>
+      Payments
+    </h3>
+
+    <p style="margin-bottom:0">
+      Online payments for Kumkum Pooja and Chanda
+      are securely processed through Razorpay.
+      We do not collect or store card numbers,
+      UPI PINs, CVVs or OTPs on this website.
+    </p>
+
+  </div>
+
+
+  <div
+    class="gl"
+    style="margin-top:30px"
+  ></div>
+
+</section>
+
+
+</main>
+
+
+  <!-- =========================
+       FOOTER
+  ========================== -->
+
+  <footer>
+
+    <div class="gl"></div>
+
+
+    <div
+      style="
+        display:flex;
+        justify-content:center;
+        align-items:flex-end;
+        gap:14px;
+        margin-bottom:10px
+      "
+    >
+
+      <svg
+        width="34"
+        viewBox="0 0 60 56"
+      >
+        <use href="#di"></use>
+      </svg>
+
+
+      <svg
+        width="54"
+        viewBox="0 0 80 50"
+      >
+        <use href="#lo"></use>
+      </svg>
+
+
+      <svg
+        width="34"
+        viewBox="0 0 60 56"
+      >
+        <use href="#di"></use>
+      </svg>
+
+    </div>
+
+
+    Jai Durga Bhavani
+
+    <br>
+
+    Dasara 2026 · Bhavanipuram
+
+  </footer>
+
+
+  <!-- =========================
+       JAVASCRIPT
+  ========================== -->
+
+  <script src="js/app.js" defer></script>
+
+  <script src="js/events.js" defer></script>
+
+  <script src="js/pooja.js" defer></script>
+
+
+  <!-- Razorpay -->
+
+  <script
+    src="https://checkout.razorpay.com/v1/checkout.js"
+  ></script>
+
+
+  <script
+    src="js/chanda.js"
+    defer
+  ></script>
+
+</body>
+
+</html>
