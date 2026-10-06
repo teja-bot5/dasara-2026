@@ -9,7 +9,7 @@ var $=function(i){
    Backend API
 -------------------------------- */
 
-var API="http://localhost:3000";
+var API="";
 
 
 /* --------------------------------

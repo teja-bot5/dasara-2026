@@ -1,0 +1,14 @@
+{
+  "festival": {
+    "startDate": "2026-10-11",
+    "datesAnnounced": false
+  },
+  "pooja": {
+    "slotsPerDay": 3,
+    "closesHoursBefore": 48
+  },
+  "chanda": {
+    "packages": [501, 1116, 2116, 5116, 11116]
+  },
+  "kumkumFee": null
+}

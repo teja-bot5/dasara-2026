@@ -1,0 +1,82 @@
+[
+  {
+    "day": 1,
+    "name": "Bala Tripura Sundari Devi",
+    "image": "assets/avatars/day1.webp",
+    "color": ["#FBE9C8", "#D97A16"],
+    "items": ["Kumkum Pooja", "Homam", "Annadhanam"],
+    "time": null
+  },
+  {
+    "day": 2,
+    "name": "Gayatri Devi",
+    "image": "assets/avatars/day2.webp",
+    "color": ["#F8E0D8", "#9D422D"],
+    "items": ["Kumkum Pooja", "Homam", "Annadhanam"],
+    "time": null
+  },
+  {
+    "day": 3,
+    "name": "Annapurna Devi",
+    "image": "assets/avatars/day3.webp",
+    "color": ["#E3EBCF", "#5D7430"],
+    "items": ["Kumkum Pooja", "Homam", "Annadhanam"],
+    "time": null
+  },
+  {
+    "day": 4,
+    "name": "Maha Chandi Devi",
+    "image": "assets/avatars/day4.webp",
+    "color": ["#FBE3EA", "#C2506E"],
+    "items": ["Kumkum Pooja", "Homam", "Annadhanam"],
+    "time": null
+  },
+  {
+    "day": 5,
+    "name": "Lalita Tripura Sundari Devi",
+    "image": "assets/avatars/day5.webp",
+    "color": ["#EEF0F2", "#8A94A0"],
+    "items": ["Kumkum Pooja", "Homam", "Annadhanam"],
+    "time": null
+  },
+  {
+    "day": 6,
+    "name": "Saraswati Devi",
+    "image": "assets/avatars/day6.webp",
+    "color": ["#FBEFC4", "#D6A00F"],
+    "items": ["Kumkum Pooja", "Homam", "Annadhanam"],
+    "time": null
+  },
+  {
+    "day": 7,
+    "name": "Mahalakshmi Devi",
+    "image": "assets/avatars/day7.webp",
+    "color": ["#F8D9D2", "#B3322A"],
+    "items": ["Kumkum Pooja", "Homam", "Annadhanam"],
+    "time": null
+  },
+  {
+    "day": 8,
+    "name": "Durga Devi",
+    "image": "assets/avatars/day8.webp",
+    "color": ["#DCE9F2", "#3F6F95"],
+    "items": ["Kumkum Pooja", "Homam", "Annadhanam"],
+    "time": null
+  },
+  {
+    "day": 9,
+    "name": "Mahishasura Mardini Devi",
+    "image": "assets/avatars/day9.webp",
+    "color": ["#EBDDF2", "#7B4B94"],
+    "items": ["Kumkum Pooja", "Homam", "Annadhanam"],
+    "time": null
+  },
+  {
+    "day": 10,
+    "name": "Rajarajeshwari Devi",
+    "image": "assets/avatars/day10.webp",
+    "color": ["#FBE9C8", "#D97A16"],
+    "items": ["Kumkum Pooja", "Homam", "Annadhanam"],
+    "time": null
+  }
+]
