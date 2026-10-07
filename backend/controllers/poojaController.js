@@ -656,3 +656,22 @@ exports.verifyKumkum = async (req, res) => {
   }
 
 };
+exports.resetPoojaRegistrations = (req, res) => {
+
+  const key = req.headers["x-cleanup-key"];
+
+  if(key !== process.env.CLEANUP_KEY){
+    return res.status(403).json({
+      error: "Forbidden"
+    });
+  }
+
+  const result = db
+    .prepare("DELETE FROM pooja_registrations")
+    .run();
+
+  return res.json({
+    success: true,
+    deleted: result.changes
+  });
+};

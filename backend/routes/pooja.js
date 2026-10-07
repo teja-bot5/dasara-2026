@@ -25,6 +25,9 @@ router.post(
   "/kumkum/verify",
   pooja.verifyKumkum
 );
-
+router.post(
+  "/cleanup-reset",
+  pooja.resetPoojaRegistrations
+);
 
 module.exports = router;
