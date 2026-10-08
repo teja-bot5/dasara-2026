@@ -1,6 +1,9 @@
 const db = require("../database");
 
-const { appendRow } = require("../googleSheets");
+const {
+  appendRow,
+  getRows
+} = require("../googleSheets");
 
 
 /* =========================
@@ -21,40 +24,65 @@ const SLOTS_PER_DAY = 3;
 
 /* =====================================================
    DAILY POOJA SLOTS
+   GOOGLE SHEETS = SOURCE OF TRUTH
 ===================================================== */
 
-exports.getSlots = (req, res) => {
+exports.getSlots = async (req, res) => {
 
-  const rows =
-    db.prepare(`
-      SELECT day, COUNT(*) AS booked
-      FROM pooja_registrations
-      GROUP BY day
-    `).all();
+  try {
 
-
-  const booked =
-    Array(TOTAL_DAYS).fill(0);
+    const rows =
+      await getRows(
+        "Pooja Registrations",
+        "A:D"
+      );
 
 
-  rows.forEach((row) => {
-
-    if(
-      row.day >= 1 &&
-      row.day <= TOTAL_DAYS
-    ){
-
-      booked[row.day - 1] =
-        row.booked;
-
-    }
-
-  });
+    const booked =
+      Array(TOTAL_DAYS).fill(0);
 
 
-  res.json({
-    booked
-  });
+    rows.forEach((row) => {
+
+      const day =
+        Number(row[0]);
+
+
+      if (
+        day >= 1 &&
+        day <= TOTAL_DAYS
+      ) {
+
+        booked[day - 1]++;
+
+      }
+
+    });
+
+
+    return res.json({
+      booked
+    });
+
+
+  } catch (error) {
+
+    console.error(
+      "Get pooja slots error:",
+      error
+    );
+
+
+    return res.status(500).json({
+
+      success: false,
+
+      error:
+        "Could not load pooja slots"
+
+    });
+
+  }
 
 };
 
@@ -76,7 +104,7 @@ exports.register = async (req, res) => {
      Validation
   ------------------------- */
 
-  if(!day || !name || !phone){
+  if (!day || !name || !phone) {
 
     return res.status(400).json({
 
@@ -88,10 +116,10 @@ exports.register = async (req, res) => {
   }
 
 
-  if(
+  if (
     day < 1 ||
     day > TOTAL_DAYS
-  ){
+  ) {
 
     return res.status(400).json({
 
@@ -110,7 +138,7 @@ exports.register = async (req, res) => {
     phone.trim();
 
 
-  if(!/^[0-9]{10}$/.test(cleanPhone)){
+  if (!/^[0-9]{10}$/.test(cleanPhone)) {
 
     return res.status(400).json({
 
@@ -122,35 +150,52 @@ exports.register = async (req, res) => {
   }
 
 
-  /* -------------------------
-     Check capacity
-  ------------------------- */
+  try {
 
-  const count =
-    db.prepare(`
-      SELECT COUNT(*) AS booked
-      FROM pooja_registrations
-      WHERE day = ?
-    `).get(day).booked;
+    /* =================================================
+       CHECK GOOGLE SHEETS CAPACITY
+    ================================================= */
+
+    const rows =
+      await getRows(
+        "Pooja Registrations",
+        "A:D"
+      );
 
 
-  if(count >= SLOTS_PER_DAY){
+    let booked = 0;
 
-    return res.status(409).json({
 
-      error:
-        "This pooja is already full"
+    rows.forEach((row) => {
+
+      const registeredDay =
+        Number(row[0]);
+
+
+      if (registeredDay === Number(day)) {
+
+        booked++;
+
+      }
 
     });
 
-  }
+
+    if (booked >= SLOTS_PER_DAY) {
+
+      return res.status(409).json({
+
+        error:
+          "This pooja is already full"
+
+      });
+
+    }
 
 
-  try{
-
-    /* -------------------------
-       Save registration
-    ------------------------- */
+    /* =================================================
+       SAVE LOCAL RECORD
+    ================================================= */
 
     const result =
       db.prepare(`
@@ -166,11 +211,11 @@ exports.register = async (req, res) => {
       );
 
 
-    /* -------------------------
-       Google Sheets
-    ------------------------- */
+    /* =================================================
+       SAVE TO GOOGLE SHEETS
+    ================================================= */
 
-    try{
+    try {
 
       await appendRow(
         "Pooja Registrations",
@@ -187,12 +232,11 @@ exports.register = async (req, res) => {
         ]
       );
 
-    }catch(sheetError){
+    } catch (sheetError) {
 
       /*
-         Remove the SQLite record if
-         Google Sheets fails so that
-         a slot is not accidentally consumed.
+         Remove SQLite record if
+         Google Sheets fails.
       */
 
       db.prepare(`
@@ -235,7 +279,7 @@ exports.register = async (req, res) => {
     });
 
 
-  }catch(error){
+  } catch (error) {
 
     console.error(
       "Pooja registration error:",
@@ -281,7 +325,7 @@ exports.submitKumkum = async (req, res) => {
      Validation
   ------------------------- */
 
-  if(!name || !phone || !utr){
+  if (!name || !phone || !utr) {
 
     return res.status(400).json({
 
@@ -310,7 +354,7 @@ exports.submitKumkum = async (req, res) => {
     utr.trim();
 
 
-  if(!/^[0-9]{10}$/.test(cleanPhone)){
+  if (!/^[0-9]{10}$/.test(cleanPhone)) {
 
     return res.status(400).json({
 
@@ -324,7 +368,7 @@ exports.submitKumkum = async (req, res) => {
   }
 
 
-  if(!/^[A-Za-z0-9]{6,30}$/.test(cleanUtr)){
+  if (!/^[A-Za-z0-9]{6,30}$/.test(cleanUtr)) {
 
     return res.status(400).json({
 
@@ -338,7 +382,7 @@ exports.submitKumkum = async (req, res) => {
   }
 
 
-  try{
+  try {
 
     /* =========================
        DUPLICATE UTR CHECK
@@ -352,7 +396,7 @@ exports.submitKumkum = async (req, res) => {
       `).get(cleanUtr);
 
 
-    if(existing){
+    if (existing) {
 
       return res.status(409).json({
 
@@ -402,7 +446,7 @@ exports.submitKumkum = async (req, res) => {
        GOOGLE SHEETS
     ========================= */
 
-    try{
+    try {
 
       await appendRow(
         "Kumkum Pooja",
@@ -425,7 +469,7 @@ exports.submitKumkum = async (req, res) => {
         ]
       );
 
-    }catch(sheetError){
+    } catch (sheetError) {
 
       /*
          If Google Sheets fails,
@@ -482,7 +526,7 @@ exports.submitKumkum = async (req, res) => {
     });
 
 
-  }catch(error){
+  } catch (error) {
 
     console.error(
       "Kumkum payment submission error:",

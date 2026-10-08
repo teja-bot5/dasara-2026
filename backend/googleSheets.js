@@ -54,9 +54,13 @@ const spreadsheetId =
   process.env.GOOGLE_SHEET_ID;
 
 
+/* =====================================================
+   APPEND ROW
+===================================================== */
+
 async function appendRow(sheetName, values) {
 
-  if(!spreadsheetId){
+  if (!spreadsheetId) {
 
     throw new Error(
       "GOOGLE_SHEET_ID is not configured"
@@ -83,6 +87,36 @@ async function appendRow(sheetName, values) {
 }
 
 
+/* =====================================================
+   GET SHEET ROWS
+===================================================== */
+
+async function getRows(sheetName, range = "A:Z") {
+
+  if (!spreadsheetId) {
+
+    throw new Error(
+      "GOOGLE_SHEET_ID is not configured"
+    );
+
+  }
+
+  const response =
+    await sheets.spreadsheets.values.get({
+
+      spreadsheetId,
+
+      range: `${sheetName}!${range}`
+
+    });
+
+
+  return response.data.values || [];
+
+}
+
+
 module.exports = {
-  appendRow
+  appendRow,
+  getRows
 };
