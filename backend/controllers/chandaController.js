@@ -1,25 +1,13 @@
 const db = require("../database");
-const Razorpay = require("razorpay");
-const crypto = require("crypto");
 const { appendRow } = require("../googleSheets");
 
 
 /* =========================
-   RAZORPAY
+   SUBMIT CHANDA PAYMENT
+   UPI + UTR
 ========================= */
 
-const razorpay = new Razorpay({
-  key_id: process.env.RAZORPAY_KEY_ID,
-  key_secret: process.env.RAZORPAY_KEY_SECRET
-});
-
-
-/* =========================
-   CREATE CHANDA PAYMENT
-   + CREATE RAZORPAY ORDER
-========================= */
-
-exports.create = async (req, res) => {
+exports.submit = async (req, res) => {
 
   const {
     amount,
@@ -27,18 +15,20 @@ exports.create = async (req, res) => {
     family_members,
     gothram,
     phone,
-    email
+    email,
+    utr
   } = req.body;
 
 
-  /* -------------------------
-     Validation
-  ------------------------- */
+  /* =========================
+     VALIDATION
+  ========================= */
 
-  if(!amount || !name || !phone){
+  if(!amount || !name || !phone || !utr){
 
     return res.status(400).json({
-      error: "Amount, name and phone are required"
+      success: false,
+      error: "Amount, name, phone and UTR are required"
     });
 
   }
@@ -53,154 +43,60 @@ exports.create = async (req, res) => {
   ){
 
     return res.status(400).json({
+      success: false,
       error: "Invalid amount"
     });
 
   }
 
 
-  if(!/^[0-9]{10}$/.test(phone.trim())){
+  const cleanName =
+    name.trim();
+
+  const cleanFamily =
+    family_members
+      ? family_members.trim()
+      : "";
+
+  const cleanGothram =
+    gothram
+      ? gothram.trim()
+      : "";
+
+  const cleanPhone =
+    phone.trim();
+
+  const cleanEmail =
+    email
+      ? email.trim()
+      : "";
+
+  const cleanUtr =
+    utr.trim();
+
+
+  if(!/^[0-9]{10}$/.test(cleanPhone)){
 
     return res.status(400).json({
+      success: false,
       error: "Please enter a valid 10-digit phone number"
     });
 
   }
 
 
-  try{
+  /*
+     UTR / Transaction ID
 
-    /* =========================
-       CREATE RAZORPAY ORDER
-    ========================= */
+     Accepts common numeric and
+     alphanumeric UTR formats.
+  */
 
-    const order = await razorpay.orders.create({
-
-      amount: Math.round(numericAmount * 100),
-
-      currency: "INR",
-
-      receipt: `chanda_${Date.now()}`,
-
-      notes: {
-        name: name.trim(),
-        phone: phone.trim()
-      }
-
-    });
-
-
-    /* =========================
-       SAVE PENDING PAYMENT
-    ========================= */
-
-    const result = db.prepare(`
-      INSERT INTO chanda_payments (
-        amount,
-        name,
-        family_members,
-        gothram,
-        phone,
-        email,
-        payment_status,
-        razorpay_order_id
-      )
-      VALUES (?, ?, ?, ?, ?, ?, 'pending', ?)
-    `).run(
-
-      numericAmount,
-
-      name.trim(),
-
-      family_members
-        ? family_members.trim()
-        : "",
-
-      gothram
-        ? gothram.trim()
-        : "",
-
-      phone.trim(),
-
-      email
-        ? email.trim()
-        : "",
-
-      order.id
-
-    );
-
-
-    /* =========================
-       SEND ORDER TO FRONTEND
-    ========================= */
-
-    return res.status(201).json({
-
-      success: true,
-
-      id: result.lastInsertRowid,
-
-      payment_status: "pending",
-
-      order_id: order.id,
-
-      amount: order.amount,
-
-      currency: order.currency,
-
-      key_id: process.env.RAZORPAY_KEY_ID
-
-    });
-
-
-  }catch(err){
-
-    console.error(
-      "Razorpay order creation error:",
-      err
-    );
-
-
-    return res.status(500).json({
-      error: "Unable to create payment order"
-    });
-
-  }
-
-};
-
-
-/* =========================
-   VERIFY RAZORPAY PAYMENT
-========================= */
-
-exports.verify = async (req, res) => {
-
-  const {
-    razorpay_order_id,
-    razorpay_payment_id,
-    razorpay_signature
-  } = req.body;
-
-
-  /* -------------------------
-     Validation
-  ------------------------- */
-
-  if(
-    !razorpay_order_id ||
-    !razorpay_payment_id ||
-    !razorpay_signature
-  ){
+  if(!/^[A-Za-z0-9]{6,30}$/.test(cleanUtr)){
 
     return res.status(400).json({
-
       success: false,
-
-      error:
-        "Payment verification details are required"
-
+      error: "Please enter a valid UTR / Transaction ID"
     });
 
   }
@@ -209,144 +105,63 @@ exports.verify = async (req, res) => {
   try{
 
     /* =========================
-       GENERATE SIGNATURE
+       DUPLICATE UTR CHECK
     ========================= */
 
-    const generatedSignature =
-      crypto
-        .createHmac(
-          "sha256",
-          process.env.RAZORPAY_KEY_SECRET
+    const existing =
+      db.prepare(`
+        SELECT id
+        FROM chanda_payments
+        WHERE utr = ?
+      `).get(cleanUtr);
+
+
+    if(existing){
+
+      return res.status(409).json({
+        success: false,
+        error: "This UTR has already been submitted"
+      });
+
+    }
+
+
+    /* =========================
+       SAVE TO SQLITE
+    ========================= */
+
+    const result =
+      db.prepare(`
+        INSERT INTO chanda_payments (
+          amount,
+          name,
+          family_members,
+          gothram,
+          phone,
+          email,
+          payment_status,
+          utr
         )
-        .update(
-          razorpay_order_id +
-          "|" +
-          razorpay_payment_id
-        )
-        .digest("hex");
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+      `).run(
 
+        numericAmount,
 
-    /* =========================
-       SAFE SIGNATURE COMPARISON
-    ========================= */
+        cleanName,
 
-    const generatedBuffer =
-      Buffer.from(
-        generatedSignature,
-        "utf8"
+        cleanFamily,
+
+        cleanGothram,
+
+        cleanPhone,
+
+        cleanEmail,
+
+        "Pending Verification",
+
+        cleanUtr
+
       );
-
-    const receivedBuffer =
-      Buffer.from(
-        razorpay_signature,
-        "utf8"
-      );
-
-
-    if(
-      generatedBuffer.length !==
-      receivedBuffer.length
-    ){
-
-      return res.status(400).json({
-
-        success: false,
-
-        error:
-          "Payment verification failed"
-
-      });
-
-    }
-
-
-    const valid =
-      crypto.timingSafeEqual(
-        generatedBuffer,
-        receivedBuffer
-      );
-
-
-    if(!valid){
-
-      return res.status(400).json({
-
-        success: false,
-
-        error:
-          "Payment verification failed"
-
-      });
-
-    }
-
-
-    /* =========================
-       FIND CHANDA RECORD
-    ========================= */
-
-    const payment = db.prepare(`
-      SELECT *
-      FROM chanda_payments
-      WHERE razorpay_order_id = ?
-    `).get(
-      razorpay_order_id
-    );
-
-
-    if(!payment){
-
-      return res.status(404).json({
-
-        success: false,
-
-        error:
-          "Chanda payment record not found"
-
-      });
-
-    }
-
-
-    /* =========================
-       DUPLICATE PROTECTION
-    ========================= */
-
-    if(
-      payment.payment_status === "paid"
-    ){
-
-      return res.json({
-
-        success: true,
-
-        message:
-          "Payment already verified"
-
-      });
-
-    }
-
-
-    /* =========================
-       UPDATE SQLITE
-    ========================= */
-
-    db.prepare(`
-      UPDATE chanda_payments
-
-      SET
-        payment_status = 'paid',
-        razorpay_payment_id = ?
-
-      WHERE razorpay_order_id = ?
-    `).run(
-
-      razorpay_payment_id,
-
-      razorpay_order_id
-
-    );
 
 
     /* =========================
@@ -361,23 +176,21 @@ exports.verify = async (req, res) => {
 
           new Date().toISOString(),
 
-          payment.amount,
+          numericAmount,
 
-          payment.name,
+          cleanName,
 
-          payment.family_members,
+          cleanFamily,
 
-          payment.gothram,
+          cleanGothram,
 
-          payment.phone,
+          cleanPhone,
 
-          payment.email,
+          cleanEmail,
 
-          "paid",
+          "Pending Verification",
 
-          razorpay_order_id,
-
-          razorpay_payment_id
+          cleanUtr
 
         ]
       );
@@ -386,17 +199,34 @@ exports.verify = async (req, res) => {
     }catch(sheetError){
 
       /*
-         Payment is already marked as paid
-         in SQLite.
+         Sheets failed.
 
-         Log the Sheets error instead of
-         telling the user that payment failed.
+         Remove the SQLite record so
+         the user can safely submit again.
       */
+
+      db.prepare(`
+        DELETE FROM chanda_payments
+        WHERE id = ?
+      `).run(
+        result.lastInsertRowid
+      );
+
 
       console.error(
         "Google Sheets error:",
         sheetError
       );
+
+
+      return res.status(502).json({
+
+        success: false,
+
+        error:
+          "Payment details could not be saved. Please try again."
+
+      });
 
     }
 
@@ -405,12 +235,17 @@ exports.verify = async (req, res) => {
        SUCCESS
     ========================= */
 
-    return res.json({
+    return res.status(201).json({
 
       success: true,
 
+      id: result.lastInsertRowid,
+
+      payment_status:
+        "Pending Verification",
+
       message:
-        "Payment verified successfully"
+        "Payment details submitted successfully. Your payment is Pending Verification by the committee."
 
     });
 
@@ -418,7 +253,7 @@ exports.verify = async (req, res) => {
   }catch(err){
 
     console.error(
-      "Payment verification error:",
+      "Chanda submission error:",
       err
     );
 
@@ -428,7 +263,7 @@ exports.verify = async (req, res) => {
       success: false,
 
       error:
-        "Unable to verify payment"
+        "Unable to submit payment details"
 
     });
 

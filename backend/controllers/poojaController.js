@@ -1,21 +1,10 @@
 const db = require("../database");
-const Razorpay = require("razorpay");
-const crypto = require("crypto");
+
 const { appendRow } = require("../googleSheets");
 
 
 /* =========================
-   RAZORPAY
-========================= */
-
-const razorpay = new Razorpay({
-  key_id: process.env.RAZORPAY_KEY_ID,
-  key_secret: process.env.RAZORPAY_KEY_SECRET
-});
-
-
-/* =========================
-   KUMKUM POOJA FEE
+   KUMKUM POOJA SETTINGS
 ========================= */
 
 const KUMKUM_FEE = 501;
@@ -26,25 +15,26 @@ const KUMKUM_FEE = 501;
 ========================= */
 
 const TOTAL_DAYS = 10;
+
 const SLOTS_PER_DAY = 3;
 
 
-/* =========================
+/* =====================================================
    DAILY POOJA SLOTS
-========================= */
+===================================================== */
 
 exports.getSlots = (req, res) => {
 
-  const rows = db.prepare(`
-    SELECT day, COUNT(*) AS booked
-    FROM pooja_registrations
-    GROUP BY day
-  `).all();
+  const rows =
+    db.prepare(`
+      SELECT day, COUNT(*) AS booked
+      FROM pooja_registrations
+      GROUP BY day
+    `).all();
 
 
-  /* 10 festival days */
-
-  const booked = Array(TOTAL_DAYS).fill(0);
+  const booked =
+    Array(TOTAL_DAYS).fill(0);
 
 
   rows.forEach((row) => {
@@ -69,9 +59,9 @@ exports.getSlots = (req, res) => {
 };
 
 
-/* =========================
+/* =====================================================
    DAILY POOJA REGISTRATION
-========================= */
+===================================================== */
 
 exports.register = async (req, res) => {
 
@@ -97,8 +87,6 @@ exports.register = async (req, res) => {
 
   }
 
-
-  /* 10 days */
 
   if(
     day < 1 ||
@@ -146,8 +134,6 @@ exports.register = async (req, res) => {
     `).get(day).booked;
 
 
-  /* 3 slots per day */
-
   if(count >= SLOTS_PER_DAY){
 
     return res.status(409).json({
@@ -172,9 +158,11 @@ exports.register = async (req, res) => {
         (day, name, phone)
         VALUES (?, ?, ?)
       `).run(
+
         day,
         cleanName,
         cleanPhone
+
       );
 
 
@@ -187,18 +175,48 @@ exports.register = async (req, res) => {
       await appendRow(
         "Pooja Registrations",
         [
+
           day,
+
           cleanName,
-          cleanPhone
+
+          cleanPhone,
+
+          new Date().toISOString()
+
         ]
       );
 
     }catch(sheetError){
 
+      /*
+         Remove the SQLite record if
+         Google Sheets fails so that
+         a slot is not accidentally consumed.
+      */
+
+      db.prepare(`
+        DELETE FROM pooja_registrations
+        WHERE id = ?
+      `).run(
+        result.lastInsertRowid
+      );
+
+
       console.error(
         "Google Sheets error:",
-        sheetError.message
+        sheetError
       );
+
+
+      return res.status(502).json({
+
+        success: false,
+
+        error:
+          "Registration could not be saved. Please try again."
+
+      });
 
     }
 
@@ -227,6 +245,8 @@ exports.register = async (req, res) => {
 
     return res.status(500).json({
 
+      success: false,
+
       error:
         "Could not complete registration"
 
@@ -239,19 +259,21 @@ exports.register = async (req, res) => {
 
 /* =====================================================
    KUMKUM POOJA
+   UPI + UTR
 ===================================================== */
 
 
 /* =========================
-   CREATE KUMKUM ORDER
+   SUBMIT KUMKUM PAYMENT
 ========================= */
 
-exports.createKumkum = async (req, res) => {
+exports.submitKumkum = async (req, res) => {
 
   const {
     name,
     phone,
-    email
+    email,
+    utr
   } = req.body;
 
 
@@ -259,12 +281,14 @@ exports.createKumkum = async (req, res) => {
      Validation
   ------------------------- */
 
-  if(!name || !phone){
+  if(!name || !phone || !utr){
 
     return res.status(400).json({
 
+      success: false,
+
       error:
-        "Name and phone are required"
+        "Name, phone and UTR are required"
 
     });
 
@@ -282,10 +306,15 @@ exports.createKumkum = async (req, res) => {
       ? email.trim()
       : "";
 
+  const cleanUtr =
+    utr.trim();
+
 
   if(!/^[0-9]{10}$/.test(cleanPhone)){
 
     return res.status(400).json({
+
+      success: false,
 
       error:
         "Please enter a valid 10-digit phone number"
@@ -295,39 +324,50 @@ exports.createKumkum = async (req, res) => {
   }
 
 
+  if(!/^[A-Za-z0-9]{6,30}$/.test(cleanUtr)){
+
+    return res.status(400).json({
+
+      success: false,
+
+      error:
+        "Please enter a valid UTR / Transaction ID"
+
+    });
+
+  }
+
+
   try{
 
     /* =========================
-       CREATE RAZORPAY ORDER
+       DUPLICATE UTR CHECK
     ========================= */
 
-    const order =
-      await razorpay.orders.create({
+    const existing =
+      db.prepare(`
+        SELECT id
+        FROM kumkum_payments
+        WHERE utr = ?
+      `).get(cleanUtr);
 
-        amount:
-          KUMKUM_FEE * 100,
 
-        currency:
-          "INR",
+    if(existing){
 
-        receipt:
-          `kumkum_${Date.now()}`,
+      return res.status(409).json({
 
-        notes: {
+        success: false,
 
-          name:
-            cleanName,
-
-          phone:
-            cleanPhone
-
-        }
+        error:
+          "This UTR has already been submitted"
 
       });
 
+    }
+
 
     /* =========================
-       SAVE PENDING PAYMENT
+       SAVE PAYMENT
     ========================= */
 
     const result =
@@ -338,9 +378,9 @@ exports.createKumkum = async (req, res) => {
           phone,
           email,
           payment_status,
-          razorpay_order_id
+          utr
         )
-        VALUES (?, ?, ?, ?, 'pending', ?)
+        VALUES (?, ?, ?, ?, ?, ?)
       `).run(
 
         KUMKUM_FEE,
@@ -351,239 +391,11 @@ exports.createKumkum = async (req, res) => {
 
         cleanEmail,
 
-        order.id
+        "Pending Verification",
+
+        cleanUtr
 
       );
-
-
-    /* =========================
-       SEND TO FRONTEND
-    ========================= */
-
-    return res.status(201).json({
-
-      success: true,
-
-      id:
-        result.lastInsertRowid,
-
-      amount:
-        order.amount,
-
-      currency:
-        order.currency,
-
-      order_id:
-        order.id,
-
-      key_id:
-        process.env.RAZORPAY_KEY_ID
-
-    });
-
-
-  }catch(error){
-
-    console.error(
-      "Kumkum Razorpay order error:",
-      error
-    );
-
-
-    return res.status(500).json({
-
-      error:
-        "Unable to create Kumkum Pooja payment"
-
-    });
-
-  }
-
-};
-
-
-/* =========================
-   VERIFY KUMKUM PAYMENT
-========================= */
-
-exports.verifyKumkum = async (req, res) => {
-
-  const {
-    razorpay_order_id,
-    razorpay_payment_id,
-    razorpay_signature
-  } = req.body;
-
-
-  /* -------------------------
-     Validation
-  ------------------------- */
-
-  if(
-    !razorpay_order_id ||
-    !razorpay_payment_id ||
-    !razorpay_signature
-  ){
-
-    return res.status(400).json({
-
-      success: false,
-
-      error:
-        "Payment verification details are required"
-
-    });
-
-  }
-
-
-  try{
-
-    /* =========================
-       GENERATE SIGNATURE
-    ========================= */
-
-    const generatedSignature =
-      crypto
-        .createHmac(
-          "sha256",
-          process.env.RAZORPAY_KEY_SECRET
-        )
-        .update(
-          razorpay_order_id +
-          "|" +
-          razorpay_payment_id
-        )
-        .digest("hex");
-
-
-    const generatedBuffer =
-      Buffer.from(
-        generatedSignature,
-        "utf8"
-      );
-
-    const receivedBuffer =
-      Buffer.from(
-        razorpay_signature,
-        "utf8"
-      );
-
-
-    /* -------------------------
-       Length check
-    ------------------------- */
-
-    if(
-      generatedBuffer.length !==
-      receivedBuffer.length
-    ){
-
-      return res.status(400).json({
-
-        success: false,
-
-        error:
-          "Payment verification failed"
-
-      });
-
-    }
-
-
-    /* -------------------------
-       Signature check
-    ------------------------- */
-
-    const valid =
-      crypto.timingSafeEqual(
-        generatedBuffer,
-        receivedBuffer
-      );
-
-
-    if(!valid){
-
-      return res.status(400).json({
-
-        success: false,
-
-        error:
-          "Payment verification failed"
-
-      });
-
-    }
-
-
-    /* =========================
-       FIND PAYMENT
-    ========================= */
-
-    const payment =
-      db.prepare(`
-        SELECT *
-        FROM kumkum_payments
-        WHERE razorpay_order_id = ?
-      `).get(
-        razorpay_order_id
-      );
-
-
-    if(!payment){
-
-      return res.status(404).json({
-
-        success: false,
-
-        error:
-          "Kumkum payment record not found"
-
-      });
-
-    }
-
-
-    /* =========================
-       DUPLICATE PROTECTION
-    ========================= */
-
-    if(
-      payment.payment_status ===
-      "paid"
-    ){
-
-      return res.json({
-
-        success: true,
-
-        message:
-          "Payment already verified"
-
-      });
-
-    }
-
-
-    /* =========================
-       MARK AS PAID
-    ========================= */
-
-    db.prepare(`
-      UPDATE kumkum_payments
-
-      SET
-        payment_status = 'paid',
-        razorpay_payment_id = ?
-
-      WHERE razorpay_order_id = ?
-    `).run(
-
-      razorpay_payment_id,
-
-      razorpay_order_id
-
-    );
 
 
     /* =========================
@@ -596,28 +408,53 @@ exports.verifyKumkum = async (req, res) => {
         "Kumkum Pooja",
         [
 
-          payment.name,
+          new Date().toISOString(),
 
-          payment.phone,
+          KUMKUM_FEE,
 
-          payment.email,
+          cleanName,
 
-          payment.amount,
+          cleanPhone,
 
-          razorpay_payment_id,
+          cleanEmail,
 
-          new Date().toISOString()
+          "Pending Verification",
+
+          cleanUtr
 
         ]
       );
 
-
     }catch(sheetError){
+
+      /*
+         If Google Sheets fails,
+         remove the local record so
+         the user can safely retry.
+      */
+
+      db.prepare(`
+        DELETE FROM kumkum_payments
+        WHERE id = ?
+      `).run(
+        result.lastInsertRowid
+      );
+
 
       console.error(
         "Kumkum Google Sheets error:",
-        sheetError.message
+        sheetError
       );
+
+
+      return res.status(502).json({
+
+        success: false,
+
+        error:
+          "Payment details could not be saved. Please try again."
+
+      });
 
     }
 
@@ -626,12 +463,21 @@ exports.verifyKumkum = async (req, res) => {
        SUCCESS
     ========================= */
 
-    return res.json({
+    return res.status(201).json({
 
       success: true,
 
+      id:
+        result.lastInsertRowid,
+
+      amount:
+        KUMKUM_FEE,
+
+      payment_status:
+        "Pending Verification",
+
       message:
-        "Kumkum Pooja payment verified successfully"
+        "Payment details submitted successfully. Your payment is Pending Verification by the committee."
 
     });
 
@@ -639,7 +485,7 @@ exports.verifyKumkum = async (req, res) => {
   }catch(error){
 
     console.error(
-      "Kumkum payment verification error:",
+      "Kumkum payment submission error:",
       error
     );
 
@@ -649,29 +495,10 @@ exports.verifyKumkum = async (req, res) => {
       success: false,
 
       error:
-        "Unable to verify Kumkum Pooja payment"
+        "Unable to submit Kumkum Pooja payment details"
 
     });
 
   }
 
-};
-exports.resetPoojaRegistrations = (req, res) => {
-
-  const key = req.headers["x-cleanup-key"];
-
-  if(key !== process.env.CLEANUP_KEY){
-    return res.status(403).json({
-      error: "Forbidden"
-    });
-  }
-
-  const result = db
-    .prepare("DELETE FROM pooja_registrations")
-    .run();
-
-  return res.json({
-    success: true,
-    deleted: result.changes
-  });
 };

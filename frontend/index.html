@@ -812,169 +812,270 @@
     </section>
 
 
-    <!-- =========================
-         CHANDA
-    ========================== -->
+   <!-- =========================
+     CHANDA
+========================== -->
 
-    <section
-      id="chanda"
-      class="sec"
+<section
+  id="chanda"
+  class="sec"
+>
+
+  <div class="eb">
+
+    <svg>
+      <use href="#fl"></use>
+    </svg>
+
+    Offering
+
+    <svg>
+      <use href="#fl"></use>
+    </svg>
+
+  </div>
+
+
+  <h2>
+    Chanda
+  </h2>
+
+
+  <p>
+    Your contribution helps support the Dasara celebration
+    and community arrangements.
+  </p>
+
+
+  <div class="panel">
+
+    <div
+      style="
+        font-size:12px;
+        color:var(--sub)
+      "
+    >
+      Choose a package
+    </div>
+
+
+    <div
+      class="pk"
+      id="pk"
+    ></div>
+
+
+    <label for="ca">
+      Or enter an amount (₹)
+    </label>
+
+    <input
+      id="ca"
+      type="number"
+      min="1"
+      inputmode="numeric"
+      placeholder="Enter amount"
     >
 
-      <div class="eb">
 
-        <svg>
-          <use href="#fl"></use>
-        </svg>
+    <label for="cn">
+      Name
+    </label>
 
-        Offering
-
-        <svg>
-          <use href="#fl"></use>
-        </svg>
-
-      </div>
+    <input
+      id="cn"
+      type="text"
+      autocomplete="name"
+      placeholder="Enter your name"
+    >
 
 
-      <h2>
-        Chanda
-      </h2>
+    <label for="cf">
+      Family members' names
+    </label>
 
+    <textarea
+      id="cf"
+      rows="2"
+      placeholder="One name per line"
+    ></textarea>
+
+
+    <label for="cg">
+      Gothram
+    </label>
+
+    <input
+      id="cg"
+      type="text"
+      placeholder="Enter gothram"
+    >
+
+
+    <label for="cp">
+      Phone
+    </label>
+
+    <input
+      id="cp"
+      type="tel"
+      inputmode="numeric"
+      autocomplete="tel"
+      maxlength="10"
+      placeholder="10-digit phone number"
+    >
+
+
+    <label for="ce">
+      Email
+    </label>
+
+    <input
+      id="ce"
+      type="email"
+      autocomplete="email"
+      placeholder="Enter email"
+    >
+
+
+    <!-- Payment -->
+
+    <div
+      id="paymentBox"
+      style="
+        display:none;
+        margin-top:24px;
+        text-align:center;
+      "
+    >
+
+      <h3>
+        Complete Payment
+      </h3>
 
       <p>
-        Your contribution is confirmed only after payment succeeds.
+        Scan the QR code or pay using your UPI app.
       </p>
 
 
-      <div class="panel">
-
-        <div
-          style="
-            font-size:12px;
-            color:var(--sub)
-          "
-        >
-          Choose a package
-        </div>
-
-
-        <div
-          class="pk"
-          id="pk"
-        ></div>
-
-
-        <label for="ca">
-          Or enter an amount (₹)
-        </label>
-
-
-        <input
-          id="ca"
-          type="number"
-          min="1"
-          inputmode="numeric"
-          placeholder="Enter amount"
-        >
-
-
-        <label for="cn">
-          Name
-        </label>
-
-
-        <input
-          id="cn"
-          type="text"
-          autocomplete="name"
-          placeholder="Enter your name"
-        >
-
-
-        <label for="cf">
-          Family members' names
-        </label>
-
-
-        <textarea
-          id="cf"
-          rows="2"
-          placeholder="One name per line"
-        ></textarea>
-
-
-        <label for="cg">
-          Gothram
-        </label>
-
-
-        <input
-          id="cg"
-          type="text"
-          placeholder="Enter gothram"
-        >
-
-
-        <label for="cp">
-          Phone
-        </label>
-
-
-        <input
-          id="cp"
-          type="tel"
-          inputmode="numeric"
-          autocomplete="tel"
-          maxlength="10"
-          placeholder="10-digit phone number"
-        >
-
-
-        <label for="ce">
-          Email
-        </label>
-
-
-        <input
-          id="ce"
-          type="email"
-          autocomplete="email"
-          placeholder="Enter email"
-        >
-
-
-        <div class="row">
-
-          <button
-            class="btn"
-            id="cb"
-            type="button"
-          >
-            Pay with Razorpay
-            <i>→</i>
-          </button>
-
-        </div>
-
-
-        <div
-          class="msg"
-          id="cm"
-        ></div>
-
-      </div>
-
-
       <div
-        class="gl"
-        style="margin-top:30px"
+        id="chandaQr"
+        style="
+          display:flex;
+          justify-content:center;
+          margin:20px 0;
+        "
       ></div>
 
-    </section>
 
+      <p
+        style="
+          margin:8px 0;
+          font-weight:600;
+        "
+      >
+        ₹<span id="paymentAmount">0</span>
+      </p>
+
+
+      <p
+        style="
+          font-size:13px;
+          color:var(--sub);
+          word-break:break-all;
+        "
+      >
+        6304569767@kotakbank
+      </p>
+
+
+      <a
+        id="upiPayBtn"
+        href="#"
+        class="btn"
+        style="
+          display:inline-block;
+          margin-top:10px;
+          text-decoration:none;
+        "
+      >
+        Pay with UPI
+        <i>→</i>
+      </a>
+
+
+      <p
+        style="
+          margin-top:22px;
+          font-size:13px;
+        "
+      >
+        After completing the payment, enter your UTR /
+        transaction ID below.
+      </p>
+
+
+      <label for="cutr">
+        UTR / Transaction ID
+      </label>
+
+      <input
+        id="cutr"
+        type="text"
+        autocomplete="off"
+        placeholder="Enter UTR / Transaction ID"
+      >
+
+
+      <button
+        class="btn"
+        id="cb"
+        type="button"
+        style="margin-top:12px"
+      >
+        Submit Payment
+        <i>→</i>
+      </button>
+
+    </div>
+
+
+    <!-- Start payment -->
+
+    <div
+      class="row"
+      id="startPaymentRow"
+    >
+
+      <button
+        class="btn"
+        id="startChandaPayment"
+        type="button"
+      >
+        Continue to Payment
+        <i>→</i>
+      </button>
+
+    </div>
+
+
+    <div
+      class="msg"
+      id="cm"
+    ></div>
+
+  </div>
+
+
+  <div
+    class="gl"
+    style="margin-top:30px"
+  ></div>
+
+</section>
 <!-- =========================
-         ABOUT
-    ========================== -->
+     ABOUT
+========================== -->
 
 <section
   id="about"
@@ -1068,30 +1169,9 @@
       Contact
     </h3>
 
-    <p style="margin-bottom:6px">
-      Sri Durga Bhavani Friends Circle
+    <p style="margin-bottom:16px">
+      Bharath Chowdary
     </p>
-
-    <p style="margin-bottom:0">
-
-      <a
-        href="tel:+916304569767"
-        style="color:inherit;text-decoration:none"
-      >
-        +91 63045 69767
-      </a>
-
-      <br>
-
-      <a
-        href="mailto:barathchowdary@gmail.com"
-        style="color:inherit;text-decoration:none"
-      >
-        barathchowdary@gmail.com
-      </a>
-
-    </p>
-
 
     <div
       class="contact-actions"
@@ -1099,7 +1179,6 @@
         display:flex;
         gap:10px;
         flex-wrap:wrap;
-        margin-top:16px;
       "
     >
 
@@ -1131,122 +1210,12 @@
   </div>
 
 
-  <!-- Festival Services -->
-
-  <div class="panel">
-
-    <h3>
-      Festival Services
-    </h3>
-
-    <p>
-      <strong>Kumkum Pooja</strong><br>
-      Devotees can register for Kumkum Pooja
-      for ₹501, subject to available slots.
-    </p>
-
-    <p>
-      <strong>Chanda</strong><br>
-      Chanda is a voluntary contribution
-      towards the Dasara celebration and
-      community arrangements.
-    </p>
-
-  </div>
-
-
-  <!-- Information & Policies -->
-
-  <div class="panel">
-
-    <h3>
-      Information &amp; Policies
-    </h3>
-
-    <p>
-      Please review the following information
-      before making a registration or payment.
-    </p>
-
-
-    <div
-      style="
-        display:flex;
-        flex-direction:column;
-        gap:10px;
-        margin-top:16px;
-      "
-    >
-
-      <a
-        href="terms.html"
-        class="btn alt"
-      >
-        Terms &amp; Conditions
-        <i>↗</i>
-      </a>
-
-
-      <a
-        href="privacy.html"
-        class="btn alt"
-      >
-        Privacy Policy
-        <i>↗</i>
-      </a>
-
-
-      <a
-        href="refund.html"
-        class="btn alt"
-      >
-        Refund &amp; Cancellation Policy
-        <i>↗</i>
-      </a>
-
-
-      <a
-        href="contact.html"
-        class="btn alt"
-      >
-        Contact Information
-        <i>↗</i>
-      </a>
-
-    </div>
-
-  </div>
-
-
-  <!-- Payment Notice -->
-
-  <div class="panel">
-
-    <h3>
-      Payments
-    </h3>
-
-    <p style="margin-bottom:0">
-      Online payments for Kumkum Pooja and Chanda
-      are securely processed through Razorpay.
-      We do not collect or store card numbers,
-      UPI PINs, CVVs or OTPs on this website.
-    </p>
-
-  </div>
-
-
   <div
     class="gl"
     style="margin-top:30px"
   ></div>
 
 </section>
-
-
-</main>
-
-
   <!-- =========================
        FOOTER
   ========================== -->
@@ -1312,17 +1281,25 @@
   <script src="js/pooja.js" defer></script>
 
 
-  <!-- Razorpay -->
+  <!-- =========================
+     JAVASCRIPT
+========================== -->
 
-  <script
-    src="https://checkout.razorpay.com/v1/checkout.js"
-  ></script>
+<script src="js/app.js" defer></script>
 
+<script src="js/events.js" defer></script>
 
-  <script
-    src="js/chanda.js"
-    defer
-  ></script>
+<script src="js/pooja.js" defer></script>
+
+<!-- QR Code -->
+<script
+  src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"
+></script>
+
+<script
+  src="js/chanda.js"
+  defer
+></script>
 
 </body>
 

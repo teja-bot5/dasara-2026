@@ -1,15 +1,22 @@
 const router = require("express").Router();
 
-const pooja = require("../controllers/poojaController");
+const pooja =
+  require("../controllers/poojaController");
 
 
 /* =========================
    DAILY POOJA
 ========================= */
 
-router.get("/slots", pooja.getSlots);
+router.get(
+  "/slots",
+  pooja.getSlots
+);
 
-router.post("/register", pooja.register);
+router.post(
+  "/register",
+  pooja.register
+);
 
 
 /* =========================
@@ -17,17 +24,9 @@ router.post("/register", pooja.register);
 ========================= */
 
 router.post(
-  "/kumkum/create",
-  pooja.createKumkum
+  "/kumkum/submit",
+  pooja.submitKumkum
 );
 
-router.post(
-  "/kumkum/verify",
-  pooja.verifyKumkum
-);
-router.post(
-  "/cleanup-reset",
-  pooja.resetPoojaRegistrations
-);
 
 module.exports = router;

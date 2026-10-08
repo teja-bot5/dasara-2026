@@ -1,415 +1,494 @@
-/* chanda.js: Chanda package selection + Razorpay checkout */
+/* chanda.js
+   Chanda contribution:
+   UPI QR + UPI app + UTR submission
+*/
+
+(function () {
+
+  var UPI_ID = "6304569767@kotakbank";
+  var PAYEE_NAME = "Dasara 2026";
+
+  var CHANDA_PACKAGES = [
+    501,
+    1001,
+    2501,
+    5001,
+    10001
+  ];
 
 
-/* =========================
-   CHANDA PACKAGES
-========================= */
-
-var CHANDA_PACKAGES = [501, 1001, 2501, 5001, 10001];
-
-
-function renderChanda(){
+  /* =========================
+     ELEMENTS
+  ========================= */
 
   var pk = $("pk");
+  var amountInput = $("ca");
 
-  if(!pk) return;
+  var nameInput = $("cn");
+  var familyInput = $("cf");
+  var gothramInput = $("cg");
+  var phoneInput = $("cp");
+  var emailInput = $("ce");
 
-  pk.innerHTML = CHANDA_PACKAGES.map(function(amount){
+  var startPaymentBtn =
+    $("startChandaPayment");
 
-    return '<button type="button" data-a="' + amount + '">₹' +
-      amount.toLocaleString("en-IN") +
-      '</button>';
+  var startPaymentRow =
+    $("startPaymentRow");
 
-  }).join("");
+  var paymentBox =
+    $("paymentBox");
 
-}
+  var paymentAmount =
+    $("paymentAmount");
 
+  var qrBox =
+    $("chandaQr");
 
-/* =========================
-   PACKAGE SELECTION
-========================= */
+  var upiPayBtn =
+    $("upiPayBtn");
 
-$("pk").onclick = function(e){
+  var utrInput =
+    $("cutr");
 
-  var b = e.target.closest("button[data-a]");
+  var submitBtn =
+    $("cb");
 
-  if(!b) return;
-
-  var amount = +b.dataset.a;
-
-  if($("ca")){
-    $("ca").value = amount;
-  }
-
-  document.querySelectorAll("#pk button").forEach(function(btn){
-
-    btn.classList.remove("selected");
-
-  });
-
-  b.classList.add("selected");
-
-};
+  var message =
+    $("cm");
 
 
-/* =========================
-   CHANDA SUBMISSION
-========================= */
+  /* =========================
+     PACKAGES
+  ========================= */
 
-$("cb").onclick = async function(){
+  function renderChanda() {
 
-  var amount = $("ca").value.trim();
-  var name = $("cn").value.trim();
-  var family = $("cf").value.trim();
-  var gothram = $("cg").value.trim();
-  var phone = $("cp").value.trim();
-  var email = $("ce").value.trim();
+    if (!pk) return;
 
-  var msg = $("cm");
+    pk.innerHTML =
+      CHANDA_PACKAGES.map(function (amount) {
 
+        return (
+          '<button type="button" data-a="' +
+          amount +
+          '">₹' +
+          amount.toLocaleString("en-IN") +
+          '</button>'
+        );
 
-  /* -------------------------
-     Validation
-  ------------------------- */
-
-  if(!amount){
-
-    msg.textContent =
-      "Please select or enter a chanda amount.";
-
-    return;
+      }).join("");
 
   }
 
 
-  var numericAmount = Number(amount);
+  /* =========================
+     PACKAGE SELECTION
+  ========================= */
 
+  if (pk) {
 
-  if(!Number.isFinite(numericAmount) || numericAmount < 1){
+    pk.onclick = function (e) {
 
-    msg.textContent =
-      "Please enter a valid amount.";
+      var button =
+        e.target.closest("button[data-a]");
 
-    return;
+      if (!button) return;
 
-  }
+      var amount =
+        Number(button.dataset.a);
 
-
-  if(!name || !phone){
-
-    msg.textContent =
-      "Please enter your name and phone number.";
-
-    return;
-
-  }
-
-
-  if(!/^[0-9]{10}$/.test(phone)){
-
-    msg.textContent =
-      "Please enter a valid 10-digit phone number.";
-
-    return;
-
-  }
-
-
-  /* -------------------------
-     Preparing payment
-  ------------------------- */
-
-  msg.textContent =
-    "Preparing payment...";
-
-  $("cb").disabled = true;
-
-
-  try{
-
-    /* =========================
-       CREATE RAZORPAY ORDER
-    ========================= */
-
-    var response = await fetch(
-      "/api/chanda/create",
-      {
-
-        method: "POST",
-
-        headers: {
-          "Content-Type": "application/json"
-        },
-
-        body: JSON.stringify({
-
-          amount: numericAmount,
-
-          name: name,
-
-          family_members: family,
-
-          gothram: gothram,
-
-          phone: phone,
-
-          email: email
-
-        })
-
+      if (amountInput) {
+        amountInput.value = amount;
       }
-    );
+
+      document
+        .querySelectorAll("#pk button")
+        .forEach(function (btn) {
+
+          btn.classList.remove("selected");
+
+        });
+
+      button.classList.add("selected");
+
+    };
+
+  }
 
 
-    var data = await response.json();
+  /* =========================
+     MESSAGE
+  ========================= */
+
+  function showMessage(text) {
+
+    if (message) {
+      message.textContent = text;
+    }
+
+  }
 
 
-    if(!response.ok || !data.success){
+  /* =========================
+     UPI LINK
+  ========================= */
 
-      throw new Error(
-        data.error ||
-        "Unable to create payment"
-      );
+  function createUpiLink(amount) {
+
+    var params =
+      new URLSearchParams({
+
+        pa: UPI_ID,
+
+        pn: PAYEE_NAME,
+
+        am: Number(amount).toFixed(2),
+
+        cu: "INR",
+
+        tn: "Dasara 2026 Chanda"
+
+      });
+
+    return "upi://pay?" + params.toString();
+
+  }
+
+
+  /* =========================
+     QR CODE
+  ========================= */
+
+  function generateQr(amount) {
+
+    if (!qrBox) return;
+
+    qrBox.innerHTML = "";
+
+    var upiLink =
+      createUpiLink(amount);
+
+
+    if (typeof QRCode === "undefined") {
+
+      qrBox.innerHTML =
+        '<p style="color:var(--sub)">' +
+        'QR code could not be loaded. ' +
+        'Please use the UPI button.' +
+        '</p>';
+
+      return;
 
     }
 
 
-    /* =========================
-       RAZORPAY CHECKOUT
-    ========================= */
+    new QRCode(qrBox, {
 
-    var options = {
+      text: upiLink,
 
-      key: data.key_id,
+      width: 220,
 
-      amount: data.amount,
+      height: 220,
 
-      currency: data.currency,
+      correctLevel:
+        QRCode.CorrectLevel.M
 
-      name: "Dasara 2026 · Vijayawada",
+    });
 
-      description: "Chanda Contribution",
-
-      order_id: data.order_id,
+  }
 
 
-      /* -------------------------
-         Customer details
-      ------------------------- */
+  /* =========================
+     VALIDATION
+  ========================= */
 
-      prefill: {
+  function validateDetails() {
 
-        name: name,
+    var amount =
+      Number(amountInput.value);
 
-        email: email,
+    var name =
+      nameInput.value.trim();
 
-        contact: phone
+    var family =
+      familyInput.value.trim();
 
-      },
+    var gothram =
+      gothramInput.value.trim();
 
+    var phone =
+      phoneInput.value.trim();
 
-      /* -------------------------
-         Internal reference
-      ------------------------- */
-
-      notes: {
-
-        chanda_id: String(data.id)
-
-      },
-
-
-      /* -------------------------
-         Theme
-      ------------------------- */
-
-      theme: {
-
-        color: "#9D422D"
-
-      },
+    var email =
+      emailInput.value.trim();
 
 
-      /* =========================
-         PAYMENT SUCCESS
-      ========================= */
+    if (!amount || amount < 1) {
 
-      handler: async function(paymentResponse){
+      showMessage(
+        "Please select or enter a valid contribution amount."
+      );
 
-        console.log(
-          "Razorpay payment response:",
-          paymentResponse
+      return false;
+
+    }
+
+
+    if (!name) {
+
+      showMessage(
+        "Please enter your name."
+      );
+
+      return false;
+
+    }
+
+
+    if (!family) {
+
+      showMessage(
+        "Please enter family member names."
+      );
+
+      return false;
+
+    }
+
+
+    if (!gothram) {
+
+      showMessage(
+        "Please enter your gothram."
+      );
+
+      return false;
+
+    }
+
+
+    if (!/^[0-9]{10}$/.test(phone)) {
+
+      showMessage(
+        "Please enter a valid 10-digit phone number."
+      );
+
+      return false;
+
+    }
+
+
+    if (
+      email &&
+      !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)
+    ) {
+
+      showMessage(
+        "Please enter a valid email address."
+      );
+
+      return false;
+
+    }
+
+
+    return true;
+
+  }
+
+
+  /* =========================
+     CONTINUE TO PAYMENT
+  ========================= */
+
+  if (startPaymentBtn) {
+
+    startPaymentBtn.onclick = function () {
+
+      showMessage("");
+
+      if (!validateDetails()) {
+        return;
+      }
+
+
+      var amount =
+        Number(amountInput.value);
+
+
+      paymentAmount.textContent =
+        amount.toLocaleString("en-IN");
+
+
+      upiPayBtn.href =
+        createUpiLink(amount);
+
+
+      generateQr(amount);
+
+
+      paymentBox.style.display =
+        "block";
+
+      startPaymentRow.style.display =
+        "none";
+
+
+      paymentBox.scrollIntoView({
+
+        behavior: "smooth",
+
+        block: "center"
+
+      });
+
+    };
+
+  }
+
+
+  /* =========================
+     SUBMIT UTR
+  ========================= */
+
+  if (submitBtn) {
+
+    submitBtn.onclick = async function () {
+
+      showMessage("");
+
+
+      if (!validateDetails()) {
+        return;
+      }
+
+
+      var utr =
+        utrInput.value.trim();
+
+
+      if (!/^[A-Za-z0-9]{6,30}$/.test(utr)) {
+
+        showMessage(
+          "Please enter a valid UTR / Transaction ID."
         );
 
+        return;
 
-        msg.textContent =
-          "Payment received. Verifying payment...";
+      }
 
 
-        try{
+      var payload = {
 
-          /* -------------------------
-             Verify payment on backend
-          ------------------------- */
+        amount:
+          Number(amountInput.value),
 
-          var verifyResponse = await fetch(
-            "/api/chanda/verify",
+        name:
+          nameInput.value.trim(),
+
+        family_members:
+          familyInput.value.trim(),
+
+        gothram:
+          gothramInput.value.trim(),
+
+        phone:
+          phoneInput.value.trim(),
+
+        email:
+          emailInput.value.trim(),
+
+        utr:
+          utr
+
+      };
+
+
+      submitBtn.disabled = true;
+
+      submitBtn.textContent =
+        "Submitting...";
+
+
+      try {
+
+        var response =
+          await fetch(
+            "/api/chanda/submit",
             {
 
               method: "POST",
 
               headers: {
-                "Content-Type": "application/json"
+                "Content-Type":
+                  "application/json"
               },
 
-              body: JSON.stringify({
-
-                razorpay_order_id:
-                  paymentResponse.razorpay_order_id,
-
-                razorpay_payment_id:
-                  paymentResponse.razorpay_payment_id,
-
-                razorpay_signature:
-                  paymentResponse.razorpay_signature
-
-              })
+              body:
+                JSON.stringify(payload)
 
             }
           );
 
 
-          var verifyData =
-            await verifyResponse.json();
+        var data =
+          await response.json();
 
 
-          /* -------------------------
-             Verification failed
-          ------------------------- */
+        if (
+          !response.ok ||
+          !data.success
+        ) {
 
-          if(
-            !verifyResponse.ok ||
-            !verifyData.success
-          ){
-
-            throw new Error(
-              verifyData.error ||
-              "Payment verification failed"
-            );
-
-          }
-
-
-          /* -------------------------
-             Payment verified
-          ------------------------- */
-
-          msg.textContent =
-            "Payment successful! Thank you for your contribution.";
-
-
-          $("cb").disabled = false;
-
-
-        }catch(err){
-
-          console.error(
-            "Payment verification error:",
-            err
+          throw new Error(
+            data.error ||
+            "Unable to submit payment."
           );
 
-
-          msg.textContent =
-            "Payment was received, but verification failed. Please contact the committee.";
-
-
-          $("cb").disabled = false;
-
         }
 
-      },
+
+        showMessage(
+          "Payment details submitted successfully. Your payment is Pending Verification by the committee."
+        );
 
 
-      /* =========================
-         CHECKOUT CLOSED
-      ========================= */
+        paymentBox.style.display =
+          "none";
 
-      modal: {
 
-        ondismiss: function(){
+        submitBtn.textContent =
+          "Submitted";
 
-          msg.textContent =
-            "Payment cancelled.";
 
-          $("cb").disabled = false;
+      } catch (error) {
 
-        }
+        console.error(error);
+
+        showMessage(
+          error.message ||
+          "Something went wrong. Please try again."
+        );
+
+
+        submitBtn.disabled =
+          false;
+
+        submitBtn.textContent =
+          "Submit Payment";
 
       }
 
     };
 
-
-    /* -------------------------
-       Create Razorpay instance
-    ------------------------- */
-
-    var rzp = new Razorpay(options);
-
-
-    /* =========================
-       PAYMENT FAILED
-    ========================= */
-
-    rzp.on(
-      "payment.failed",
-      function(response){
-
-        console.error(
-          "Razorpay payment failed:",
-          response.error
-        );
-
-
-        msg.textContent =
-          "Payment failed. Please try again.";
-
-
-        $("cb").disabled = false;
-
-      }
-    );
-
-
-    /* -------------------------
-       Open checkout
-    ------------------------- */
-
-    rzp.open();
-
-
-  }catch(err){
-
-    console.error(
-      "Chanda payment error:",
-      err
-    );
-
-
-    msg.textContent =
-      err.message ||
-      "Something went wrong. Please try again.";
-
-
-    $("cb").disabled = false;
-
   }
 
-};
 
+  /* =========================
+     INITIAL LOAD
+  ========================= */
 
-/* =========================
-   INITIAL LOAD
-========================= */
+  renderChanda();
 
-renderChanda();
+})();
