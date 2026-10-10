@@ -10,7 +10,7 @@ const {
    KUMKUM POOJA SETTINGS
 ========================= */
 
-const KUMKUM_FEE = 501;
+const KUMKUM_FEE = 216;
 
 
 /* =========================

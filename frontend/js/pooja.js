@@ -463,7 +463,7 @@ $("poojaForm").onclick = function(e){
 ===================================================== */
 
 var KUMKUM_FEE =
-  501;
+  216;
 
 
 var KUMKUM_UPI_ID =
@@ -547,7 +547,7 @@ function createKumkumPaymentBox(){
     </h3>
 
     <p>
-      Pay ₹501 using your UPI app or scan the QR code.
+      Pay ₹216 using your UPI app or scan the QR code.
     </p>
 
 
@@ -567,7 +567,7 @@ function createKumkumPaymentBox(){
         font-weight:600;
       "
     >
-      ₹501
+      ₹216
     </p>
 
 
